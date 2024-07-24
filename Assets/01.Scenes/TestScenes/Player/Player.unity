@@ -527,7 +527,7 @@ CharacterController:
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.0001
-  m_MinMoveDistance: 0.001
+  m_MinMoveDistance: 0
   m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &561712053
 MonoBehaviour:
@@ -787,6 +787,7 @@ GameObject:
   m_Component:
   - component: {fileID: 853696483}
   - component: {fileID: 853696484}
+  - component: {fileID: 853696485}
   m_Layer: 0
   m_Name: Virtual Camera
   m_TagString: Untagged
@@ -849,6 +850,21 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_ComponentOwner: {fileID: 59645575}
+--- !u!114 &853696485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 853696482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5fb10426c7734c4199775866d2310ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  horizontalSpeed: 10
+  verticalSpeed: 10
+  clampAngle: 80
 --- !u!1 &871387507
 GameObject:
   m_ObjectHideFlags: 0
