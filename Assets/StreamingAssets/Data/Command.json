@@ -1,0 +1,15 @@
+{
+    "commands" : [
+        {
+            "name" : "consolestart",
+            "description" : "시작 화면 입니다.",
+            "actionname" : "none"
+        },
+        {
+            "name": "store",
+            "description": "회사 상점에 오신 것을 환영합니다.\n아이템 이름 앞에 BUY와 INFO를 입력해보세요.\n숫자를 입력하여 도구를 여러 개 주문할 수 있습니다.\n----------------------------\n\n\n{0}\n\n함선 강화:\n{1}\n함선 장식 목록은 할당량별로 순환됩니다. 다음 주에 꼭 다시 확인해보세요:\n----------------------------\n\n{2}\n",
+            "actionname": "storelist"
+        }
+
+    ]
+}

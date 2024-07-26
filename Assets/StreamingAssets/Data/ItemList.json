@@ -1,0 +1,46 @@
+{
+    "regularItems": [
+        {
+            "name": "산소 탱크",
+            "description": "생존에 필수적인 산소를 제공합니다.",
+            "price": 100,
+            "prefabName": "OxygenTankPrefab"
+        },
+        {
+            "name": "레이저 건",
+            "description": "기본적인 방어 무기입니다.",
+            "price": 200,
+            "prefabName": "LaserGunPrefab"
+        }
+    ],
+    "shipUpgrades": [
+        {
+            "name": "엔진 부스터",
+            "description": "함선의 속도를 10% 증가시킵니다.",
+            "price": 500,
+            "upgradeType": "Engine"
+        },
+        {
+            "name": "방어막 강화",
+            "description": "함선의 방어력을 15% 증가시킵니다.",
+            "price": 700,
+            "upgradeType": "Shield"
+        }
+    ],
+    "specialItems": [
+        {
+            "name": "골드 장식",
+            "description": "함선 내부를 고급스럽게 꾸밉니다.",
+            "price": 1000,
+            "decorationType": "Interior",
+            "prefabName": "GoldDecorPrefab"
+        },
+        {
+            "name": "홀로그램 디스플레이",
+            "description": "함선 대시보드에 설치되는 고급 장비입니다.",
+            "price": 1500,
+            "decorationType": "Dashboard",
+            "prefabName": "HologramDisplayPrefab"
+        }
+    ]
+}
