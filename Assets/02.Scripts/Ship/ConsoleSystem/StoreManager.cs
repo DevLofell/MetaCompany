@@ -8,9 +8,8 @@ public class Item
     public string name;
     public string description;
     public int price;
-    public string prefabName;
-    public string upgradeType;
-    public string decorationType;
+    public string type;
+    public string asset;
 }
 
 [System.Serializable]
@@ -67,9 +66,9 @@ public class StoreManager : MonoBehaviour
     public GameObject GetItemPrefab(string itemName)
     {
         Item item = FindItem(itemName);
-        if (item != null && !string.IsNullOrEmpty(item.prefabName))
+        if (item != null && !string.IsNullOrEmpty(item.asset))
         {
-            return Resources.Load<GameObject>(item.prefabName);
+            return Resources.Load<GameObject>(item.asset);
         }
         return null;
     }
@@ -89,5 +88,14 @@ public class StoreManager : MonoBehaviour
             if (item.name == itemName) return item;
         }
         return null;
+    }
+    public string GetItemInfo(string itemName)
+    {
+        Item item = FindItem(itemName);
+        if (item != null)
+        {
+            return $"Name: {item.name}\nDescription: {item.description}\nPrice: ${item.price}";
+        }
+        return $"Item not found: {itemName}";
     }
 }

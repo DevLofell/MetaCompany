@@ -2,6 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public enum GameStatus
+{
+    Intro,
+    MainMenu,
+    Lobby,
+    InPlanet
+}
 public class GameManager : MonoSingleton<GameManager>
 {
     // Start is called before the first frame update

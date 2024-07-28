@@ -1,0 +1,46 @@
+{
+    "companyplanets" : [
+        {
+            "name": "회사 건물",
+            "description": "시작 화면 입니다.",
+            "price": 0,
+            "type": "planet",
+            "asset": "company_building"
+        }
+    ],
+    "easeplanets": [
+       {
+        "name": "저 난이도 행성",
+        "description": "더미 데이터 입니다.",
+        "price": 0,
+        "type": "planet",
+        "asset": "none"
+        }
+        
+    ],
+    "normalplanets": [
+        {
+            "name": "중간 난이도 행성",
+            "description": "더미 데이터 입니다.",
+            "price": 0,
+            "type": "planet",
+            "asset": "none"
+        }
+    ],
+    "hardplanets": [
+        {
+            "name": "다인",
+            "description": "시작 화면 입니다.",
+            "price": 0,
+            "type": "planet",
+            "asset": "dine"
+        },
+        {
+            "name": "고 난이도 행성",
+            "description": "더미 데이터 입니다.",
+            "price": 0,
+            "type": "planet",
+            "asset": "none"
+        }
+    ]
+}
