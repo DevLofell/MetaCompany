@@ -53,4 +53,14 @@ public class InputManager : MonoBehaviour
     {
         return playerControls.Player.Jump.triggered;
     }
+
+    public bool PlayerRan()
+    {
+        return playerControls.Player.Run.IsPressed();
+    }
+
+    public bool PlayerCrouchinged()
+    {
+        return playerControls.Player.Crouching.IsPressed();
+    }
 }
