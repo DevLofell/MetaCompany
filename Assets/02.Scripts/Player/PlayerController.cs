@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     private Transform cameraTr;
 
     private PlayerAnimation anim;
+    private StaminaSystem stamina;
 
     public GameObject playerModel;
     private void Start()
@@ -33,6 +34,7 @@ public class PlayerController : MonoBehaviour
         jumpVelocity = Mathf.Sqrt(jumpForce * -2f * gravity);
         originSpeed = playerSpeed;
         anim = GetComponent<PlayerAnimation>();
+        stamina = GetComponent<StaminaSystem>();
     }
     private float gravityMultiplier = 2f; // 중력 배율 추가
     private float jumpVelocity;
@@ -48,16 +50,20 @@ public class PlayerController : MonoBehaviour
         Vector2 movement = inputManager.GetPlayerMovement();
         Vector3 moveDirection = Vector3.ProjectOnPlane(cameraTr.TransformDirection(new Vector3(movement.x, 0f, movement.y)), Vector3.up).normalized;
         moveDirection.y = 0f;
-        PlayerWalk(movement);
+        if (isCrouch == false)
+        {
+            PlayerWalk(movement);
+        }
         PlayerRun();
         PlayerCrouching();
 
 
         // 점프 처리
-        if (inputManager.PlayerJumpedThisFrame() && (isGroundedPlayer || isSlopePlayer))
+        if (inputManager.PlayerJumpedThisFrame() && ((isGroundedPlayer || isSlopePlayer) && !isCrouch))
         {
             PlayerJump();
             isJumpOnce = true;
+            anim.OnStand();
         }
 
         // 회전 처리
@@ -89,9 +95,12 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            // 일반 지면 또는 공중에서의 이동
-            playerVelocity.x = moveDirection.x * playerSpeed;
-            playerVelocity.z = moveDirection.z * playerSpeed;
+            // 일반 지면 이동
+            if (isGroundedPlayer)
+            {
+                playerVelocity.x = moveDirection.x * playerSpeed;
+                playerVelocity.z = moveDirection.z * playerSpeed;
+            }
 
             // 중력 적용
             playerVelocity.y += gravity * gravityMultiplier * Time.deltaTime;
@@ -106,6 +115,7 @@ public class PlayerController : MonoBehaviour
 
     private void PlayerJump()
     {
+        stamina.DecreaseStaminaForJump();
         anim.OnAir();
         // 현재 수직 속도를 고려하여 점프 힘 조절
         float currentYVelocity = playerVelocity.y;
@@ -126,14 +136,14 @@ public class PlayerController : MonoBehaviour
 
         if (!isMoving)
         {
-            StopAllAnimations();
+            StopWalkAnimations();
             return;
         }
 
         // 수직 이동 우선 처리
         if (movement.y != 0f)
         {
-            StopAllAnimations();
+            StopWalkAnimations();
             if (movement.y > 0f)
             {
                 anim.OnWalk(true);
@@ -146,7 +156,7 @@ public class PlayerController : MonoBehaviour
         // 수직 이동이 없을 때만 수평 이동 처리
         else if (movement.x != 0f)
         {
-            StopAllAnimations();
+            StopWalkAnimations();
             if (movement.x > 0f)
             {
                 anim.OnSideWalkR();
@@ -158,7 +168,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void StopAllAnimations()
+    private void StopWalkAnimations()
     {
         anim.OnWalk(false);
         anim.OnWalkBack(false);
@@ -170,29 +180,62 @@ public class PlayerController : MonoBehaviour
         // 달리기 처리
         if (inputManager.PlayerRan())
         {
-            playerSpeed = 6f;
+            if (inputManager.PlayerRunOnce())
+            {
+                print("1");
+                stamina.ChangeCoroutine("Decrease");
+            }
+            anim.OnStand();
+            playerSpeed = 5f;
             anim.OnRun(true);
+            isCrouch = false;
         }
         else
         {
+            if (inputManager.PlayerRunReleasedOnce())
+            {
+                print("2");
+                stamina.ChangeCoroutine("Increase");
+            }
             playerSpeed = originSpeed;
             anim.OnRun(false);
         }
     }
-
+    public bool isCrouch = false;
     private void PlayerCrouching()
     {
-        if (inputManager.PlayerCrouchinged())
+        if (isJumpOnce == false)
         {
-            cc.height = 0.9f;
-            cc.center = new Vector3(0f, 0.44f, 0f);
-            anim.OnCrouching();
-        }
-        else
-        {
-            cc.height = 1.8f;
-            cc.center = new Vector3(0f, 0.88f, 0f);
-            anim.OnStand();
+            if (inputManager.PlayerCrouchinged() && isCrouch == false)
+            {
+                isCrouch = true;
+                anim.OnWalk(false);
+                cc.height = 0.9f;
+                cc.center = new Vector3(0f, 0.44f, 0f);
+                anim.OnCrouching();
+            }
+            else if(inputManager.PlayerCrouchinged() && isCrouch == true)
+            {
+                isCrouch = false;
+                cc.height = 1.8f;
+                cc.center = new Vector3(0f, 0.88f, 0f);
+                anim.OnStand();
+            }
+            if (isCrouch == true)
+            {
+                if (inputManager.GetPlayerMovement().y > 0 || (inputManager.GetPlayerMovement().x != 0))
+                {
+                    anim.CrouchingMove(1);
+                }
+                else if (inputManager.GetPlayerMovement().y < 0)
+                {
+                    anim.CrouchingMove(-1);
+                }
+                else
+                {
+                    anim.CrouchingMove(0);
+                }
+            }
         }
     }
 }

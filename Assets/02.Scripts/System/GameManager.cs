@@ -4,15 +4,10 @@ using UnityEngine;
 
 public class GameManager : MonoSingleton<GameManager>
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public UIManager uiManager;
 
-    // Update is called once per frame
-    void Update()
+    private void Awake()
     {
-        
+        uiManager = GameObject.Find("UIManager").GetComponent<UIManager>();
     }
 }

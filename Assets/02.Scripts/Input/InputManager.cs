@@ -59,8 +59,16 @@ public class InputManager : MonoBehaviour
         return playerControls.Player.Run.IsPressed();
     }
 
+    public bool PlayerRunOnce()
+    {
+        return playerControls.Player.Run.WasPressedThisFrame();
+    }
+    public bool PlayerRunReleasedOnce()
+    {
+        return playerControls.Player.Run.WasReleasedThisFrame();
+    }
     public bool PlayerCrouchinged()
     {
-        return playerControls.Player.Crouching.IsPressed();
+        return playerControls.Player.Crouching.triggered;
     }
 }

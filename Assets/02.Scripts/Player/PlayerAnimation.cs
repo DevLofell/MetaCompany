@@ -57,6 +57,19 @@ public class PlayerAnimation : MonoBehaviour
         animator.SetBool("isCrouching", true);
     }
 
+    public void CrouchingMove(int speed)
+    {
+        if (speed == 0)
+        {
+            animator.Play("Crouch", 0, 0);
+        }
+        else
+        {
+            animator.SetFloat("CrouchingFrontBack", speed);
+        }
+        
+    }
+
     public void OnStand()
     {
         animator.SetBool("isCrouching", false);
