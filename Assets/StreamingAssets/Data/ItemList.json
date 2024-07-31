@@ -5,14 +5,16 @@
             "description": "자기 방어를 위해!",
             "price" : 30,
             "type": "item",
-            "asset": "shovel"
+            "assetname": "shovel",
+            "asset": null
         },
         {
             "name": "손전등",
             "description": "가성비 좋은 광원입니다. 심지어 방수까지 됩니다!",
             "price" : 15,
             "type": "item",
-            "asset": "flashlight"
+            "assetname": "flashlight",
+            "asset" : null
         }
     ],
     "shipUpgrades": [
@@ -21,7 +23,8 @@
             "description": "더미 데이터 입니다.",
             "price": 0,
             "type": "none",
-            "asset" : "none"
+            "assetname" : "",
+            "aseet" : null
         }
     ],
     "specialItems": [
@@ -30,7 +33,8 @@
             "description": "더미 데이터 입니다.",
             "price": 0,
             "type": "none",
-            "asset": "none"
+            "assetname": "",
+            "asset" : null
         }
     ]
 }

@@ -1,16 +1,8 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public enum GameStatus
-{
-    Intro,
-    MainMenu,
-    Lobby,
-    InPlanet
-}
-public class GameManager : MonoSingleton<GameManager>
+public class SceneManager : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()

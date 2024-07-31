@@ -1,77 +1,103 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using UnityEditor;
+using UnityEditor.VersionControl;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 
 [System.Serializable]
-public class Planet
+public class PlanetData : CommandData
 {
-    public string name;
-    public string description;
-    public int price;
-    public string type;
-    public string asset;
+    public int price;  // JSON의 "price"와 일치하도록 변경
 }
+
 [System.Serializable]
-public class PlanetList
+public class PlanetDataList
 {
-    public List<Planet> companyplanets;
-    public List<Planet> easeplanets;
-    public List<Planet> normalplanets;
-    public List<Planet> hardplanets;
+    public List<PlanetData> companyplanets;
+    public List<PlanetData> easeplanets;
+    public List<PlanetData> normalplanets;
+    public List<PlanetData> hardplanets;
 }
-public class PlanetManager : MonoBehaviour
+public class PlanetManager : SubCommand
 {
-    public PlanetList planetList;
+    private static readonly string PLANET_FILE_PATH = Path.Combine(Application.streamingAssetsPath, "Data", "PlanetList.json");
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        LoadPlanetList();
-    }
+    public PlanetDataList planetDataList;
 
-    private void LoadPlanetList()
+    public List<SceneAsset> assetlist;
+    public List<SceneReference> referencelist;
+
+
+
+    public override string GetFormattedList()
     {
-    
-    }
-    
-    public string GetFormattedList()
-    {
-        
-        string companyplanetsStr = FormatItems(planetList.companyplanets);
-        string reaseplanetsStr = FormatItems(planetList.easeplanets);
-        string normalplanetsStr = FormatItems(planetList.normalplanets);
-        string hardplanetsStr = FormatItems(planetList.hardplanets);
+        string companyplanetsStr = FormatItems(planetDataList.companyplanets);
+        string reaseplanetsStr = FormatItems(planetDataList.easeplanets);
+        string normalplanetsStr = FormatItems(planetDataList.normalplanets);
+        string hardplanetsStr = FormatItems(planetDataList.hardplanets);
 
         //이거 {0},{1}등등 사이에 바로 넣는듯?
         return string.Format(ConsoleManager.instance.GetCommandDescription("moons"),
                              companyplanetsStr, reaseplanetsStr, normalplanetsStr, hardplanetsStr);
     }
-    private string FormatItems(List<Planet> items)
+
+    private string FormatItems(List<PlanetData> planets)
     {
         string result = "";
-        foreach (var item in items)
+        foreach(var planet in planets)
         {
-            result += $"* {item.name}  //  가격: ${item.price}\n";
+            result += $"* {planet.name}";
         }
         return result;
     }
 
-    public Scene GetScene(string mapName)
+    public override List<CommandData> LoadDataList()
     {
-        return new Scene();
-    }
+        List<CommandData> result = new List<CommandData>();
+        if (File.Exists(PLANET_FILE_PATH))
+        {
+            string jsonContent = File.ReadAllText(PLANET_FILE_PATH, System.Text.Encoding.UTF8);
+            planetDataList = JsonUtility.FromJson<PlanetDataList>(jsonContent);
+            result.AddRange(planetDataList.companyplanets);
+            result.AddRange(planetDataList.easeplanets);
+            result.AddRange(planetDataList.normalplanets);
+            result.AddRange(planetDataList.hardplanets);
 
-    // Update is called once per frame
-    void Update()
-    {
+            AssignSceneAssets(result); // 씬 에셋 할당
+        }
+        else
+        {
+            Debug.LogError("Command.json file not found at path: " + PLANET_FILE_PATH);
+            planetDataList = new PlanetDataList();
+            result = null;
+        }
         
+        return result;
     }
 
-    internal string GetFormattedItemList()
+    private void AssignSceneAssets(List<CommandData> dataList)
     {
-        throw new NotImplementedException();
+        foreach (var data in dataList)
+        {
+            var planetData = data as PlanetData;
+            if (planetData != null)
+            {
+                foreach (var sceneAsset in assetlist)
+                {
+                    if (string.IsNullOrEmpty(planetData.assetname)) return;
+                    if (sceneAsset.name.IndexOf(planetData.assetname, StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        planetData.asset = sceneAsset;
+                        break;
+                    }
+                }
+            }
+        }
     }
+
+
+
 }

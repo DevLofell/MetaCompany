@@ -1,59 +1,38 @@
-﻿using UnityEngine;
-using System.IO;
+﻿using JetBrains.Annotations;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using UnityEngine;
+
 
 [System.Serializable]
-public class Item
+public class ItemData : CommandData
 {
-    public string name;
-    public string description;
     public int price;
-    public string type;
-    public string asset;
 }
-
 [System.Serializable]
-public class ItemList
+public class ItemDataList
 {
-    public List<Item> regularItems;
-    public List<Item> shipUpgrades;
-    public List<Item> specialItems;
+    public List<ItemData> regularItems;
+    public List<ItemData> shipUpgrades;
+    public List<ItemData> specialItems;
 }
 
-public class StoreManager : MonoBehaviour
+public class StoreManager : SubCommand
 {
-    public ItemList itemList;
+    private static readonly string STORE_FILE_PATH = Path.Combine(Application.streamingAssetsPath, "Data", "ItemList.json");
 
-    void Start()
+    public ItemDataList itemDataList;
+
+    public override string GetFormattedList()
     {
-        LoadItemList();
+        string regularItemsStr = FormatItems(itemDataList.regularItems);
+        string shipUpgradesStr = FormatItems(itemDataList.shipUpgrades);
+        string specialItemsStr = FormatItems(itemDataList.specialItems);
+
+        return string.Format(ConsoleManager.instance.GetCommandDescription("store"), regularItemsStr, shipUpgradesStr, specialItemsStr);
     }
-
-    void LoadItemList()
-    {
-        string filePath = Path.Combine(Application.streamingAssetsPath,"Data", "ItemList.json");
-        if (File.Exists(filePath))
-        {
-            string jsonContent = File.ReadAllText(filePath);
-            itemList = JsonUtility.FromJson<ItemList>(jsonContent);
-        }
-        else
-        {
-            Debug.LogError("ItemList.json not found!");
-        }
-    }
-
-    public string GetFormattedItemList()
-    {
-        string regularItemsStr = FormatItems(itemList.regularItems);
-        string shipUpgradesStr = FormatItems(itemList.shipUpgrades);
-        string specialItemsStr = FormatItems(itemList.specialItems);
-
-        return string.Format(ConsoleManager.instance.GetCommandDescription("store"),
-                             regularItemsStr, shipUpgradesStr, specialItemsStr);
-    }
-
-    private string FormatItems(List<Item> items)
+    private string FormatItems(List<ItemData> items)
     {
         string result = "";
         foreach (var item in items)
@@ -63,39 +42,23 @@ public class StoreManager : MonoBehaviour
         return result;
     }
 
-    public GameObject GetItemPrefab(string itemName)
+    public override List<CommandData> LoadDataList()
     {
-        Item item = FindItem(itemName);
-        if (item != null && !string.IsNullOrEmpty(item.asset))
+        List<CommandData> result = new List<CommandData>();
+        if (File.Exists(STORE_FILE_PATH))
         {
-            return Resources.Load<GameObject>(item.asset);
-        }
-        return null;
-    }
+            string jsonContent = File.ReadAllText(STORE_FILE_PATH, System.Text.Encoding.UTF8);
+            itemDataList = JsonUtility.FromJson<ItemDataList>(jsonContent);
+            result.AddRange(itemDataList.regularItems);
+            result.AddRange(itemDataList.shipUpgrades);
+            result.AddRange(itemDataList.specialItems);
 
-    private Item FindItem(string itemName)
-    {
-        foreach (var item in itemList.regularItems)
-        {
-            if (item.name == itemName) return item;
         }
-        foreach (var item in itemList.shipUpgrades)
+        else
         {
-            if (item.name == itemName) return item;
+            Debug.LogError("ItemList.json not found!");
+            itemDataList = new ItemDataList();
         }
-        foreach (var item in itemList.specialItems)
-        {
-            if (item.name == itemName) return item;
-        }
-        return null;
-    }
-    public string GetItemInfo(string itemName)
-    {
-        Item item = FindItem(itemName);
-        if (item != null)
-        {
-            return $"Name: {item.name}\nDescription: {item.description}\nPrice: ${item.price}";
-        }
-        return $"Item not found: {itemName}";
+        return result;
     }
 }
