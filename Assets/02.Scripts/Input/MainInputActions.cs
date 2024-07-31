@@ -187,7 +187,7 @@ public partial class @MainInputActions: IInputActionCollection2, IDisposable
                     ""id"": ""98ea680f-8ab9-458e-9f8f-2253a7200375"",
                     ""path"": ""<Mouse>/scroll"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""NormalizeVector2"",
                     ""groups"": ""Keyboard_Mouse"",
                     ""action"": ""MouseWheel"",
                     ""isComposite"": false,

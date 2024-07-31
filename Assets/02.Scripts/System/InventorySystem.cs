@@ -9,35 +9,57 @@ public class InventorySystem : MonoBehaviour
     private int curInventoryContainerNum = 0;
     [SerializeField] private float selectScale = 0.7f;
     [SerializeField] private float normalScale = 0.55f;
-    [SerializeField] private float scrollingDelay = 0.1f;
-    private WaitForSeconds waitSrollingDelay;
-    private Coroutine inventoryCoroutine;
-
+    [SerializeField] private float scrollingDelay = 2f;
+    private WaitForSeconds waitScrollingDelay;
+    private bool canChange = true;
+    private Coroutine coroutine;
     private void Start()
     {
         inputManager = InputManager.instance;
-        waitSrollingDelay = new WaitForSeconds(scrollingDelay);
-        inventoryCoroutine = StartCoroutine(Switching());
+        waitScrollingDelay = new WaitForSeconds(scrollingDelay);
     }
+    private bool canScroll = true;
 
     private void Update()
     {
-
-    }
-    IEnumerator Switching()
-    {
-        while (true)
+        if (canScroll && inputManager.IsScrollingEnter())
         {
-            yield return waitSrollingDelay;
-            if (inputManager.IsScrollingEnter() && inputManager.InventorySwitching().y >= 1)
+            Vector2 scrollValue = inputManager.InventorySwitching();
+            if (scrollValue.y != 0)
             {
-                curInventoryContainerNum++;
+                StartCoroutine(ScrollDelay());
+                Switching(scrollValue.y);
             }
-            else if (inputManager.IsScrollingEnter() && inputManager.InventorySwitching().y <= -1)
-            {
-                curInventoryContainerNum--;
-            }
-            print(Mathf.Abs(curInventoryContainerNum %= 4));
         }
     }
+
+    private void Switching(float scrollValue)
+    {
+        print("!!!");
+        if (scrollValue > 0)
+        {
+            curInventoryContainerNum++;
+        }
+        else if (scrollValue < 0)
+        {
+            curInventoryContainerNum--;
+        }
+
+        curInventoryContainerNum = (curInventoryContainerNum + 4) % 4;
+        Debug.Log($"Current Inventory Container: {curInventoryContainerNum}");
+    }
+
+    private IEnumerator ScrollDelay()
+    {
+        canScroll = false;
+        yield return new WaitForSeconds(scrollingDelay);
+        canScroll = true;
+        
+    }
+
+    //IEnumerator ScrollingTimer()
+    //{
+    //    yield return waitScrollingDelay;
+    //    time = scrollingDelay;
+    //}
 }
