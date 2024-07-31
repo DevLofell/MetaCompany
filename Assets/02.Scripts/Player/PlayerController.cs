@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour
     {
         groundCheck = GetComponent<GroundCheck>();
         cc = GetComponent<CharacterController>();
-        inputManager = InputManager.Instance;
+        inputManager = InputManager.instance;
         cameraTr = Camera.main.transform;
         jumpVelocity = Mathf.Sqrt(jumpForce * -2f * gravity);
         originSpeed = playerSpeed;
@@ -182,7 +182,6 @@ public class PlayerController : MonoBehaviour
         {
             if (inputManager.PlayerRunOnce())
             {
-                print("1");
                 stamina.ChangeCoroutine("Decrease");
             }
             anim.OnStand();
@@ -194,7 +193,6 @@ public class PlayerController : MonoBehaviour
         {
             if (inputManager.PlayerRunReleasedOnce())
             {
-                print("2");
                 stamina.ChangeCoroutine("Increase");
             }
             playerSpeed = originSpeed;

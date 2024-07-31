@@ -1,32 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class InputManager : MonoBehaviour
+public class InputManager : MonoSingleton<InputManager>
 {
-    private static InputManager _instance;
-
-    public static InputManager Instance
-    {
-        get
-        {
-            return _instance;
-        }
-    }
     private MainInputActions playerControls;
 
     private void Awake()
     {
-        if (_instance != null && _instance != this)
-        {
-            Destroy(this.gameObject);
-        }
-        else
-        {
-            _instance = this;
-        }
         playerControls = new MainInputActions();
         Cursor.visible = false;
+        //playerControls.PlayerActions.MouseWheel.performed += x
     }
 
     private void OnEnable()
@@ -39,36 +24,64 @@ public class InputManager : MonoBehaviour
         playerControls.Disable();
     }
 
+    #region Input_Move
     public Vector2 GetPlayerMovement()
     {
-        return playerControls.Player.Movement.ReadValue<Vector2>();
+        return playerControls.PlayerActions.Movement.ReadValue<Vector2>();
     }
+    #endregion
 
+    #region Input_Look
     public Vector2 GetMouseDelta()
     {
-        return playerControls.Player.Look.ReadValue<Vector2>();
+        return playerControls.PlayerActions.Look.ReadValue<Vector2>();
     }
+    #endregion
 
+    #region Input_Jump
     public bool PlayerJumpedThisFrame()
     {
-        return playerControls.Player.Jump.triggered;
+        return playerControls.PlayerActions.Jump.triggered;
     }
+    #endregion
 
+    #region Input_Run
     public bool PlayerRan()
     {
-        return playerControls.Player.Run.IsPressed();
+        return playerControls.PlayerActions.Run.IsPressed();
     }
 
     public bool PlayerRunOnce()
     {
-        return playerControls.Player.Run.WasPressedThisFrame();
+        return playerControls.PlayerActions.Run.WasPressedThisFrame();
     }
     public bool PlayerRunReleasedOnce()
     {
-        return playerControls.Player.Run.WasReleasedThisFrame();
+        return playerControls.PlayerActions.Run.WasReleasedThisFrame();
     }
+    #endregion
+
+    #region Input_Crouch
     public bool PlayerCrouchinged()
     {
-        return playerControls.Player.Crouching.triggered;
+        return playerControls.PlayerActions.Crouching.triggered;
     }
+    #endregion
+
+    #region Input_Wheel
+    public Vector2 InventorySwitching()
+    {
+        return playerControls.PlayerActions.MouseWheel.ReadValue<Vector2>();
+    }
+
+    public bool IsScrollingEnter()
+    {
+        return playerControls.PlayerActions.MouseWheel.WasPressedThisFrame();
+    }
+
+    public bool IsScrollingExit()
+    {
+        return playerControls.PlayerActions.MouseWheel.WasReleasedThisFrame();
+    }
+    #endregion
 }

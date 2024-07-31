@@ -19,7 +19,7 @@ public class GroundCheck : MonoBehaviour
     private Vector3 offsetRay = Vector3.zero;
     private void Start()
     {
-        inputManager = InputManager.Instance;
+        inputManager = InputManager.instance;
     }
     private void Update()
     {

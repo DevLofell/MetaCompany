@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 3526372621460962377}
   - component: {fileID: 1533159101572256754}
   - component: {fileID: 1020925095336607495}
+  - component: {fileID: 5245687335016137691}
+  - component: {fileID: 4247132496991615867}
   - component: {fileID: 362817943496584918}
   m_Layer: 0
   m_Name: Player
@@ -56,13 +58,13 @@ CharacterController:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Height: 2
+  m_Height: 1.8
   m_Radius: 0.2
   m_SlopeLimit: 45
-  m_StepOffset: 0
-  m_SkinWidth: 0.0001
+  m_StepOffset: 0.1
+  m_SkinWidth: 0.001
   m_MinMoveDistance: 0
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Center: {x: 0, y: 0.88, z: 0}
 --- !u!114 &3526372621460962377
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75,10 +77,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0d6bfb6e5b411c4d90f081401d05073, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerSpeed: 4
+  playerSpeed: 2
   jumpForce: 6
   gravity: -9.81
   playerModel: {fileID: 0}
+  isCrouch: 0
 --- !u!114 &1533159101572256754
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110,6 +113,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd5f23a6312597346916c4bc12ab3fa8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5245687335016137691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3199463859623630397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be1b25de8d51cd34c9bf08806e8e9288, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxStamina: 100
+  increaseRatePerSecond: 10
+  decreaseRatePerSecond: 10
+  decreaseRateForJump: 10
+  weight: 0
+--- !u!114 &4247132496991615867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3199463859623630397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a0ff2e0de884214f88f5ad67e10605d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventory:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!95 &362817943496584918
 Animator:
   serializedVersion: 5
@@ -155,8 +192,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6678321358615165208}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.5015201, y: 0.48743513, z: 0.51136976, w: 0.49938524}
-  m_LocalPosition: {x: -0.146, y: 0.125, z: 0.001}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.172, y: 0.162, z: 0.004}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

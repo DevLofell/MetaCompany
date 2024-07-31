@@ -12,12 +12,13 @@ public class StaminaSystem : MonoBehaviour
     private WaitForSeconds increaseSec;
     private WaitForSeconds decreaseSec;
     private Coroutine staminaCoroutine;
+    public float weight = 0f;
 
     private void Start()
     {
         curStamina = maxStamina;
         increaseSec = new WaitForSeconds(1f / increaseRatePerSecond);
-        decreaseSec = new WaitForSeconds(1f / decreaseRatePerSecond);
+        decreaseSec = new WaitForSeconds(1f / (decreaseRatePerSecond + weight));
         staminaCoroutine = StartCoroutine(IncreaseStamina());
     }
 
@@ -32,14 +33,13 @@ public class StaminaSystem : MonoBehaviour
         {
             curStamina = 0;
         }
-        GameManager.instance.uiManager.staminaImage.fillAmount = curStamina / maxStamina;
+        UIManager.instance.UpdateStaminaUI(curStamina / maxStamina);
     }
 
     IEnumerator IncreaseStamina()
     {
         while (true)
         {
-            print("In");
             yield return increaseSec;
             UpdateStamina(1f);
         }
@@ -49,7 +49,6 @@ public class StaminaSystem : MonoBehaviour
     {
         while (true)
         {
-            print("D");
             yield return decreaseSec;
             UpdateStamina(-1f);
         }
