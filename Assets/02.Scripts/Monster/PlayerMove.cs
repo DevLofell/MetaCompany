@@ -30,6 +30,10 @@ public class PlayerMove : MonoBehaviour
     // 현재 시간
     float currTime;
 
+    // 플레이어 체력
+    public float health = 100.0f;
+
+
     void Start()
     {
 
@@ -119,6 +123,13 @@ public class PlayerMove : MonoBehaviour
 
     }
 
-
-
+    public void TakeDamage(float amount)
+    {
+        health -= amount;
+        if(health <= 0)
+        {
+            health = 0;
+            Destroy(gameObject,1);
+        }
+    }
 }

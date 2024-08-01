@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -15.8}
-  m_LocalScale: {x: 500, y: 500, z: 500}
+  m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -136,5 +136,5 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 5723cf36fcf32d840a7a9c57979c598b, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 07976654cecc62042bb5d62d95897472, type: 2}
   m_BuildHeightMesh: 0
