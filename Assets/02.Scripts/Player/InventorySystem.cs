@@ -9,7 +9,7 @@ public class InventorySystem : MonoBehaviour
     private int curInventoryContainerNum = 0;
     [SerializeField] private float selectScale = 0.7f;
     [SerializeField] private float normalScale = 0.55f;
-    [SerializeField] private float scrollingDelay = 2f;
+    [SerializeField] private float scrollingDelay = 3f;
     private WaitForSeconds waitScrollingDelay;
     private bool canChange = true;
     private Coroutine coroutine;
@@ -19,7 +19,6 @@ public class InventorySystem : MonoBehaviour
         waitScrollingDelay = new WaitForSeconds(scrollingDelay);
     }
     private bool canScroll = true;
-
     private void Update()
     {
         if (canScroll && inputManager.IsScrollingEnter())
@@ -27,15 +26,19 @@ public class InventorySystem : MonoBehaviour
             Vector2 scrollValue = inputManager.InventorySwitching();
             if (scrollValue.y != 0)
             {
-                StartCoroutine(ScrollDelay());
-                Switching(scrollValue.y);
+                StartCoroutine(ScrollDelay(scrollValue.y));
             }
         }
     }
-
+    private IEnumerator ScrollDelay(float scrollValue)
+    {
+        canScroll = false;
+        Switching(scrollValue);
+        yield return waitScrollingDelay;
+        canScroll = true;
+    }
     private void Switching(float scrollValue)
     {
-        print("!!!");
         if (scrollValue > 0)
         {
             curInventoryContainerNum++;
@@ -45,17 +48,11 @@ public class InventorySystem : MonoBehaviour
             curInventoryContainerNum--;
         }
 
-        curInventoryContainerNum = (curInventoryContainerNum + 4) % 4;
-        Debug.Log($"Current Inventory Container: {curInventoryContainerNum}");
+        curInventoryContainerNum = (curInventoryContainerNum+4) % 4;
+        UIManager.instance.UpdateInventoryUI(curInventoryContainerNum);
     }
 
-    private IEnumerator ScrollDelay()
-    {
-        canScroll = false;
-        yield return new WaitForSeconds(scrollingDelay);
-        canScroll = true;
-        
-    }
+    
 
     //IEnumerator ScrollingTimer()
     //{
