@@ -1,0 +1,40 @@
+{
+    "regularItems": [
+        {
+            "name": "철제 삽",
+            "description": "자기 방어를 위해!",
+            "price" : 30,
+            "type": "item",
+            "assetname": "shovel",
+            "asset": null
+        },
+        {
+            "name": "손전등",
+            "description": "가성비 좋은 광원입니다. 심지어 방수까지 됩니다!",
+            "price" : 15,
+            "type": "item",
+            "assetname": "flashlight",
+            "asset" : null
+        }
+    ],
+    "shipUpgrades": [
+        {
+            "name": "함선 업그레이드",
+            "description": "더미 데이터 입니다.",
+            "price": 0,
+            "type": "none",
+            "assetname" : "",
+            "aseet" : null
+        }
+    ],
+    "specialItems": [
+        {
+            "name": "특별 아이템",
+            "description": "더미 데이터 입니다.",
+            "price": 0,
+            "type": "none",
+            "assetname": "",
+            "asset" : null
+        }
+    ]
+}

@@ -1,0 +1,50 @@
+{
+    "companyplanets" : [
+        {
+            "name": "회사 건물",
+            "description": "시작 화면 입니다.",
+            "price": 0,
+            "type": "planet",
+            "assetname": "company_building",
+            "asset" : null
+        }
+    ],
+    "easeplanets": [
+       {
+        "name": "저 난이도 행성",
+        "description": "더미 데이터 입니다.",
+        "price": 0,
+        "type": "planet",
+        "assetname" : "",
+        "asset": null
+        }
+    ],
+    "normalplanets": [
+        {
+            "name": "중간 난이도 행성",
+            "description": "더미 데이터 입니다.",
+            "price": 0,
+            "type": "planet",
+            "assetname": "",
+            "asset": null
+        }
+    ],
+    "hardplanets": [
+        {
+            "name": "다인",
+            "description": "7-다인\n----------------------\n조건: 백색 왜성 주위를 공전하고 있어 혹독하고 추운 환경을 조성하고 있습니다. 지속적인 눈보라 때문에 가시성이 좋지 않습니다.\n\n역사: 몇몇 유명한 여행자들이 이곳에서 실종되어 명령을 얻었지만, 행성의 환경 때문에 시신을 찾을 가능성은 거의 없어 보입니다.\n\n동물군: 이곳에 다세포 생명체가 존재할 가능성은 거의 없습니다.",
+            "price": 0,
+            "type": "planet",
+            "assetname": "dine",
+            "asset": null
+        },
+        {
+            "name": "고 난이도 행성",
+            "description": "더미 데이터 입니다.",
+            "price": 0,
+            "type": "planet",
+            "assetname": "",
+            "asset": null
+        }
+    ]
+}
