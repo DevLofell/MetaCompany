@@ -100,10 +100,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cc: {fileID: 3002776582133118089}
-  speed: 100
+  speed: 200
   gravity: -9.81
   jumForce: 5
   audioSource: {fileID: 756755779856951770}
+  health: 100
 --- !u!143 &3002776582133118089
 CharacterController:
   m_ObjectHideFlags: 0
@@ -151,7 +152,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 74.873245
+  MaxDistance: 50
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
