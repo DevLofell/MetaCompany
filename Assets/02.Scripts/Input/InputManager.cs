@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 public class InputManager : MonoSingleton<InputManager>
 {
     private MainInputActions playerControls;
+    public bool inputCrouch = false;
 
     private void Awake()
     {
@@ -64,7 +65,21 @@ public class InputManager : MonoSingleton<InputManager>
     #region Input_Crouch
     public bool PlayerCrouchinged()
     {
+        //ToggleCrouchinged();
         return playerControls.PlayerActions.Crouching.triggered;
+    }
+
+    public bool ToggleCrouchinged()
+    {
+        if (inputCrouch == false && playerControls.PlayerActions.Crouching.triggered)
+        {
+            inputCrouch = true;
+        }
+        else if (inputCrouch == true && playerControls.PlayerActions.Crouching.triggered)
+        {
+            inputCrouch = false;
+        }
+        return inputCrouch;
     }
     #endregion
 

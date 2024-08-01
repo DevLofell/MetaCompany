@@ -206,6 +206,8 @@ public class PlayerController : MonoBehaviour
         {
             if (inputManager.PlayerCrouchinged() && isCrouch == false)
             {
+                inputManager.ToggleCrouchinged();
+                playerSpeed = 1f;
                 isCrouch = true;
                 anim.OnWalk(false);
                 cc.height = 0.9f;
@@ -214,6 +216,8 @@ public class PlayerController : MonoBehaviour
             }
             else if(inputManager.PlayerCrouchinged() && isCrouch == true)
             {
+                inputManager.ToggleCrouchinged();
+                playerSpeed = originSpeed;
                 isCrouch = false;
                 cc.height = 1.8f;
                 cc.center = new Vector3(0f, 0.88f, 0f);
