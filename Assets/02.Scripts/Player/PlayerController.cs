@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
 
     private PlayerAnimation anim;
     private StaminaSystem stamina;
+    private PlayerSoundSystem sound;
 
     public GameObject playerModel;
     private void Start()
@@ -35,6 +36,7 @@ public class PlayerController : MonoBehaviour
         originSpeed = playerSpeed;
         anim = GetComponent<PlayerAnimation>();
         stamina = GetComponent<StaminaSystem>();
+        sound = GetComponentInChildren<PlayerSoundSystem>();
     }
     private float gravityMultiplier = 2f; // 중력 배율 추가
     private float jumpVelocity;
@@ -77,6 +79,7 @@ public class PlayerController : MonoBehaviour
         // 지면에 닿았을 때 y 속도 리셋
         if (isGroundedPlayer && playerVelocity.y < 0)
         {
+            sound.StartLanding();//한번만
             if (isJumpOnce == true)
             {
                 anim.EndJump();
