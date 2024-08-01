@@ -49,7 +49,7 @@ public class PlanetManager : SubCommand
         string result = "";
         foreach(var planet in planets)
         {
-            result += $"* {planet.name}";
+            result += $"* {planet.name}\n";
         }
         return result;
     }
@@ -98,6 +98,26 @@ public class PlanetManager : SubCommand
         }
     }
 
+    public PlanetData FindPlanetByName(string name)
+    {
+        List<List<PlanetData>> allPlanets = new List<List<PlanetData>>
+    {
+        planetDataList.companyplanets,
+        planetDataList.easeplanets,
+        planetDataList.normalplanets,
+        planetDataList.hardplanets
+    };
 
+        foreach (var planetList in allPlanets)
+        {
+            PlanetData planet = planetList.Find(p => p.name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            if (planet != null)
+            {
+                return planet;
+            }
+        }
+
+        return null;
+    }
 
 }
