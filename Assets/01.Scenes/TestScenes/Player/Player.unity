@@ -2558,6 +2558,11 @@ PrefabInstance:
       propertyPath: inventory.Array.data[3]
       value: 
       objectReference: {fileID: 1577489477}
+    - target: {fileID: 5245687335016137691, guid: 0c42cc8adc08be342918e39626cb5ac0,
+        type: 3}
+      propertyPath: decreaseRateForJump
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 5822874008268874523, guid: 0c42cc8adc08be342918e39626cb5ac0,
         type: 3}
       propertyPath: m_LocalPosition.x

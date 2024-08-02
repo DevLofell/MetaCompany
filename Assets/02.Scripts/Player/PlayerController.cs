@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
     private float gravityMultiplier = 2f; // 중력 배율 추가
     private float jumpVelocity;
     private bool isJumpOnce = false;
-    private bool isLandingOnce = false;
+    public bool isLandingOnce = false;
 
     private void Update()
     {
@@ -58,15 +58,18 @@ public class PlayerController : MonoBehaviour
             PlayerWalk(movement);
         }
         PlayerRun();
+
         PlayerCrouching();
 
-
         // 점프 처리
-        if (inputManager.PlayerJumpedThisFrame() && ((isGroundedPlayer || isSlopePlayer) && !isCrouch))
+        if (!stamina.isImpossibleJump)
         {
-            PlayerJump();
-            isJumpOnce = true;
-            anim.OnStand();
+            if (inputManager.PlayerJumpedThisFrame() && ((isGroundedPlayer || isSlopePlayer) && !isCrouch))
+            {
+                PlayerJump();
+                isJumpOnce = true;
+                anim.OnStand();
+            }
         }
 
         // 회전 처리
@@ -87,6 +90,7 @@ public class PlayerController : MonoBehaviour
             }
             if (isJumpOnce == true)
             {
+                stamina.ChangeCoroutine("Increase");
                 anim.EndJump();
                 cc.height = 1.8f;
                 cc.center = new Vector3(0f, 0.88f, 0f);
@@ -186,14 +190,15 @@ public class PlayerController : MonoBehaviour
         anim.OnWalkBack(false);
         anim.OnSideEnd();
     }
-
+    bool runDecreaseCount = false;
     private void PlayerRun()
     {
         // 달리기 처리
-        if (inputManager.PlayerRan())
+        if (!stamina.isImpossibleJump && inputManager.PlayerRan())
         {
-            if (inputManager.PlayerRunOnce())
+            if (runDecreaseCount == false)
             {
+                runDecreaseCount = true;
                 stamina.ChangeCoroutine("Decrease");
             }
             anim.OnStand();
@@ -205,7 +210,12 @@ public class PlayerController : MonoBehaviour
         {
             if (inputManager.PlayerRunReleasedOnce())
             {
+                runDecreaseCount = false;
                 stamina.ChangeCoroutine("Increase");
+            }
+            else if (inputManager.PlayerRan())
+            {
+                stamina.ChangeCoroutine("Decrease");
             }
             playerSpeed = originSpeed;
             anim.OnRun(false);

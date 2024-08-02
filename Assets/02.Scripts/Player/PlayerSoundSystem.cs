@@ -20,15 +20,12 @@ public class PlayerSoundSystem : MonoBehaviour
     }
 
     private bool isRunning = false;
+    public bool isLanding = false;
 
     private void Update()
     {
-        if (inputManager.PlayerJumpedThisFrame())
-        {
-            StopFootsteps();
-            StartJump();
-        }
-        else if (inputManager.GetPlayerMovement() != Vector2.zero && !inputManager.inputCrouch)
+        
+        if (isLanding == true && inputManager.GetPlayerMovement() != Vector2.zero && !inputManager.inputCrouch)
         {
             bool currentlyRunning = inputManager.PlayerRan();
             if (currentlyRunning != isRunning || soundCoroutine == null)
@@ -36,10 +33,19 @@ public class PlayerSoundSystem : MonoBehaviour
                 isRunning = currentlyRunning;
                 RestartFootsteps();
             }
+            else
+            {
+                StartFootsteps();
+            }
         }
         else
         {
+            
             StopFootsteps();
+        }
+        if (isLanding == true && inputManager.PlayerJumpedThisFrame())
+        {
+            StartJump();
         }
     }
 
@@ -52,7 +58,6 @@ public class PlayerSoundSystem : MonoBehaviour
 
     private IEnumerator PlayFootsteps()
     {
-        
         while (true)
         {
             PlayRandomSound("FootStep");
@@ -78,13 +83,17 @@ public class PlayerSoundSystem : MonoBehaviour
     #endregion
 
     #region Jump
-    private void StartJump()
+    public void StartJump()
     {
+        //StopFootsteps();
+        isLanding = false;
         PlayRandomSound("Jump");
     }
 
     public void StartLanding()
     {
+        print("222");
+        isLanding = true;
         PlayRandomSound("Landing");
     }
     #endregion

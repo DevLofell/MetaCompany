@@ -10,7 +10,7 @@ public class GroundCheck : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
 
     [SerializeField]
-    private float maxSlopeAngle = 50f;
+    private float maxSlopeAngle = 60f;
     private const float RAY_DISTANCE = 20f;
     private RaycastHit slopeHit;
     public Vector3 rayHitNormal;
@@ -68,7 +68,7 @@ public class GroundCheck : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(transform.position, Vector3.down, out hit, 0.1f))
         {
-            return Vector3.Angle(hit.normal, Vector3.up) < 10f; // 5도 이하의 경사를 평지로 간주
+            return Vector3.Angle(hit.normal, Vector3.up) < 10f; // 10도 이하의 경사를 평지로 간주
         }
         return false;
     }
