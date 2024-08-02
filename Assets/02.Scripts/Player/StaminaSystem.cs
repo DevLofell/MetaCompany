@@ -8,11 +8,13 @@ public class StaminaSystem : MonoBehaviour
     [SerializeField] private float maxStamina = 100f;
     [SerializeField] private float increaseRatePerSecond = 10f;
     [SerializeField] private float decreaseRatePerSecond = 10f;
-    [SerializeField] private float decreaseRateForJump = 10f;
+    [SerializeField] private float decreaseRateForJump = 15f;
     private WaitForSeconds increaseSec;
     private WaitForSeconds decreaseSec;
     private Coroutine staminaCoroutine;
     public float weight = 0f;
+    public bool isExhausted = false;
+    public bool isImpossibleJump = false;
 
     private void Start()
     {
@@ -29,9 +31,22 @@ public class StaminaSystem : MonoBehaviour
         {
             curStamina = maxStamina;
         }
-        else if (curStamina <= 0)
+        if (curStamina <= 0)
         {
+            isExhausted = true;
             curStamina = 0;
+        }
+        if (curStamina > 0)
+        {
+            isExhausted = false;
+        }
+        if (curStamina < decreaseRateForJump)
+        {
+            isImpossibleJump = true;
+        }
+        else
+        {
+            isImpossibleJump = false;
         }
         UIManager.instance.UpdateStaminaUI(curStamina / maxStamina);
     }
@@ -56,7 +71,9 @@ public class StaminaSystem : MonoBehaviour
 
     public void DecreaseStaminaForJump()
     {
+        StopCoroutine(staminaCoroutine);
         UpdateStamina(-decreaseRateForJump);
+        //ChangeCoroutine("Increase");
     }
 
     public void ChangeCoroutine(string toName)
