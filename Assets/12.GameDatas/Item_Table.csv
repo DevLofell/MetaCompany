@@ -9,9 +9,3 @@ ID,Name,Type,Kg,Hand,Sound,Interact,Conduction,Buy,Gold
 10101,shovel,store,6,two,null,Y,Y,30,null
 10102,pro-flashlight,store,2,one,null,Y,N,25,null
 10103,stun grenade,store,2,one,null,Y,Y,30,null
-,,,,,,,,,
-,,,,,,,,,
-,,,,,,,,,
-,,,,,,,,,
-,,,,,,,,,
-,,,,,,, ,,

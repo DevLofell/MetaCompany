@@ -41,6 +41,7 @@ public class PlayerController : MonoBehaviour
     private float gravityMultiplier = 2f; // 중력 배율 추가
     private float jumpVelocity;
     private bool isJumpOnce = false;
+    private bool isLandingOnce = false;
 
     private void Update()
     {
@@ -79,7 +80,11 @@ public class PlayerController : MonoBehaviour
         // 지면에 닿았을 때 y 속도 리셋
         if (isGroundedPlayer && playerVelocity.y < 0)
         {
-            sound.StartLanding();//한번만
+            if (!isLandingOnce)
+            {
+                isLandingOnce = true;
+                sound.StartLanding();
+            }
             if (isJumpOnce == true)
             {
                 anim.EndJump();
@@ -88,6 +93,10 @@ public class PlayerController : MonoBehaviour
                 isJumpOnce = false;
             }
             playerVelocity.y = -5f;
+        }
+        else if (!isGroundedPlayer && playerVelocity.y != 0)
+        {
+            isLandingOnce = false;
         }
         // 경사면 및 중력 처리
         if (isSlopePlayer && !inputManager.PlayerJumpedThisFrame())

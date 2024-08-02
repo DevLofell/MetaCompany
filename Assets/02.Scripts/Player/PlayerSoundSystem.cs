@@ -28,7 +28,7 @@ public class PlayerSoundSystem : MonoBehaviour
             StopFootsteps();
             StartJump();
         }
-        if (inputManager.GetPlayerMovement() != Vector2.zero && !inputManager.inputCrouch)
+        else if (inputManager.GetPlayerMovement() != Vector2.zero && !inputManager.inputCrouch)
         {
             bool currentlyRunning = inputManager.PlayerRan();
             if (currentlyRunning != isRunning || soundCoroutine == null)
@@ -52,6 +52,7 @@ public class PlayerSoundSystem : MonoBehaviour
 
     private IEnumerator PlayFootsteps()
     {
+        
         while (true)
         {
             PlayRandomSound("FootStep");
