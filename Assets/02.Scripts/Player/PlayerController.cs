@@ -69,6 +69,7 @@ public class PlayerController : MonoBehaviour
                 PlayerJump();
                 isJumpOnce = true;
                 anim.OnStand();
+                stamina.ChangeCoroutine("Increase");
             }
         }
 
@@ -90,7 +91,6 @@ public class PlayerController : MonoBehaviour
             }
             if (isJumpOnce == true)
             {
-                stamina.ChangeCoroutine("Increase");
                 anim.EndJump();
                 cc.height = 1.8f;
                 cc.center = new Vector3(0f, 0.88f, 0f);
