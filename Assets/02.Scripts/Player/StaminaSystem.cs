@@ -73,7 +73,6 @@ public class StaminaSystem : MonoBehaviour
     {
         StopCoroutine(staminaCoroutine);
         UpdateStamina(-decreaseRateForJump);
-        //ChangeCoroutine("Increase");
     }
 
     public void ChangeCoroutine(string toName)
