@@ -4,5 +4,11 @@ using UnityEngine;
 
 public class ProFlashLight : MonoBehaviour
 {
+    [SerializeField]
+    private int info;
 
+    public int GetInfo()
+    {
+        return info;
+    }
 }

@@ -92,7 +92,6 @@ public class PlayerSoundSystem : MonoBehaviour
 
     public void StartLanding()
     {
-        print("222");
         isLanding = true;
         PlayRandomSound("Landing");
     }

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +8,7 @@ public class UIManager : MonoSingleton<UIManager>
 {
     public Image staminaImage;
     public List<GameObject> inventoryUI = new List<GameObject>();
+    public List<CanvasGroup> interactionUI = new List<CanvasGroup>();
     [SerializeField] private Vector2 sizeSelectInventory = new Vector2(70f, 70f);
     [SerializeField] private Vector2 sizeNormalInventory = new Vector2(55f, 55f);
     private int originIdx = 0;
@@ -17,6 +19,7 @@ public class UIManager : MonoSingleton<UIManager>
     {
         staminaImage = GameObject.Find("StaminaGauge").GetComponent<Image>();
         resizeCoroutines = new Coroutine[inventoryUI.Count];
+        UpdateInteractionUI(0, 0, true);
     }
 
     #region StaminaManage
@@ -57,4 +60,19 @@ public class UIManager : MonoSingleton<UIManager>
         rt.sizeDelta = endSize;
     }
     #endregion
+
+    public void UpdateInteractionUI(int idx, int alpha, bool isAll)
+    {
+        if (isAll)
+        {
+            for (int i = 0; i < interactionUI.Count; i++)
+            {
+                interactionUI[i].GetComponent<CanvasGroup>().alpha = alpha;
+            }
+        }
+        else
+        {
+            interactionUI[idx].GetComponent<CanvasGroup>().alpha = alpha;
+        }
+    }
 }

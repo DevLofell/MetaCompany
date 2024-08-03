@@ -99,4 +99,11 @@ public class InputManager : MonoSingleton<InputManager>
         return playerControls.PlayerActions.MouseWheel.WasReleasedThisFrame();
     }
     #endregion
+
+    #region Input_Interactive
+    public bool PlayerInteractionThisFrame()
+    {
+        return playerControls.PlayerActions.Interaction.triggered;
+    }
+    #endregion
 }
