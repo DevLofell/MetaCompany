@@ -50,7 +50,10 @@ public class InteractionSystem : MonoBehaviour
                 uiManager.UpdateInteractionUI(interactables[index].info, 1, false);
                 if (inputManager.PlayerInteractionThisFrame())
                 {
+                    if (interactables[index].info == 1)
+                    {
 
+                    }
                 }
                 return;
             }

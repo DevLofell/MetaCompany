@@ -49,7 +49,13 @@ public class InputManager : MonoSingleton<InputManager>
     #region Input_Run
     public bool PlayerRan()
     {
-        return playerControls.PlayerActions.Run.IsPressed();
+        if (playerControls.PlayerActions.Run.IsPressed())
+        {
+            inputCrouch = false;
+            return true;
+        }
+        
+        return false;
     }
 
     public bool PlayerRunOnce()

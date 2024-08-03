@@ -40,7 +40,6 @@ public class PlayerSoundSystem : MonoBehaviour
         }
         else
         {
-            
             StopFootsteps();
         }
         if (isLanding == true && inputManager.PlayerJumpedThisFrame())
