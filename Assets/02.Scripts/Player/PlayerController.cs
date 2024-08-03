@@ -86,6 +86,10 @@ public class PlayerController : MonoBehaviour
         {
             if (!isLandingOnce)
             {
+                if (inputManager.PlayerRan())
+                {
+                    stamina.ChangeCoroutine("Decrease");
+                }
                 isLandingOnce = true;
                 sound.StartLanding();
             }
