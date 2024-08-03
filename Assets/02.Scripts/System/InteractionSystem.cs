@@ -25,7 +25,7 @@ public class InteractionSystem : MonoBehaviour
         uiManager = UIManager.instance;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         RaycastCenter();
     }
@@ -44,15 +44,27 @@ public class InteractionSystem : MonoBehaviour
         
         if (hitDetected)
         {
-            int index = hit.collider.GetComponent<InteractableObject>().info;
-            if (interactables[index].CompareTag("Interactable"))
+            InteractableObject hitObject = hit.collider.GetComponent<InteractableObject>();
+            int index = hitObject.info;
+            if (hitObject != null && hitObject.CompareTag("Interactable"))
             {
-                uiManager.UpdateInteractionUI(interactables[index].info, 1, false);
+                uiManager.UpdateInteractionUI(hitObject.info, 1, false);
                 if (inputManager.PlayerInteractionThisFrame())
                 {
-                    if (interactables[index].info == 1)
+                    switch (hitObject.type)
                     {
-
+                        case ObjectType.SHIP_LEVER://TODO : 회전,위치 보간이동 > 회전은 계속, 위치는 일정 다가가면 고정
+                            gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, hitObject.standingTr.position, Time.deltaTime);
+                            break;
+                        case ObjectType.SHIP_CONSOLE://TODO : 콘솔 전원켜기
+                            gameObject.transform.position = hitObject.standingTr.position;
+                            break;
+                        case ObjectType.SHIP_CHARGER:
+                            break;
+                        case ObjectType.ITEM_ONEHAND:
+                            break;
+                        case ObjectType.ITEM_TWOHAND:
+                            break;
                     }
                 }
                 return;
