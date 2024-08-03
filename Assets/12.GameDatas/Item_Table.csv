@@ -1,0 +1,11 @@
+int,string,string,int,string,string,string,string,int,int
+ID,Name,Type,Kg,Hand,Sound,Interact,Conduction,Buy,Gold
+10001,Airhorn,scrap,0,one,Y,Y,N,null,"(52, 72)"
+10002,big bolt,scrap,9,one,N,N,Y,null,"(20, 32)"
+10003,fancy lamp,scrap,5,two,N,N,Y,null,"(60, 128)"
+10004,large axle,scrap,7,two,N,N,Y,null,"(36, 56)"
+10005,rubber ducky,scrap,3,one,Y,N,N,null,"(2, 100)"
+,,,,,,,,,
+10101,shovel,store,6,two,null,Y,Y,30,null
+10102,pro-flashlight,store,2,one,null,Y,N,25,null
+10103,stun grenade,store,2,one,null,Y,Y,30,null
