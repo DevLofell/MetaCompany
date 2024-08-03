@@ -55,8 +55,11 @@ MonoBehaviour:
   - {fileID: 8300000, guid: f0f794c67e9233d468a38d165590d253, type: 3}
   - {fileID: 8300000, guid: 1a7741daba5446e46a40f8074aae75dc, type: 3}
   - {fileID: 8300000, guid: 0bc66974c41ff8c4fa15f46d21ad3548, type: 3}
+  JumpSound: {fileID: 8300000, guid: effd59cbf9620a0478338167870c4d51, type: 3}
+  LandingSound: {fileID: 8300000, guid: d9a050c362cfe1d48a96c2130f560370, type: 3}
   walkInterval: 0.5
   runInterval: 0.25
+  isLanding: 0
 --- !u!82 &2839697485201721372
 AudioSource:
   m_ObjectHideFlags: 0
@@ -214,7 +217,7 @@ CharacterController:
   serializedVersion: 3
   m_Height: 1.8
   m_Radius: 0.2
-  m_SlopeLimit: 45
+  m_SlopeLimit: 60
   m_StepOffset: 0.1
   m_SkinWidth: 0.001
   m_MinMoveDistance: 0
@@ -235,6 +238,7 @@ MonoBehaviour:
   jumpForce: 6
   gravity: -9.81
   playerModel: {fileID: 0}
+  isLandingOnce: 0
   isCrouch: 0
 --- !u!114 &1533159101572256754
 MonoBehaviour:
@@ -252,7 +256,7 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  maxSlopeAngle: 45
+  maxSlopeAngle: 60
   rayHitNormal: {x: 0, y: 0, z: 0}
   isOnFlatGround: 0
 --- !u!114 &1020925095336607495
@@ -282,8 +286,10 @@ MonoBehaviour:
   maxStamina: 100
   increaseRatePerSecond: 10
   decreaseRatePerSecond: 10
-  decreaseRateForJump: 10
+  decreaseRateForJump: 20
   weight: 0
+  isExhausted: 0
+  isImpossibleJump: 0
 --- !u!114 &4247132496991615867
 MonoBehaviour:
   m_ObjectHideFlags: 0
