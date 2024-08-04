@@ -140,9 +140,12 @@ public class PlayerController : MonoBehaviour
             cc.Move(playerVelocity * Time.deltaTime);
         }
         // 좌우 회전
-        Vector2 lookInput = inputManager.GetMouseDelta();
-        float mouseX = lookInput.x * rotationSpeed * Time.deltaTime;
-        transform.Rotate(Vector3.up * mouseX);
+        if (inputManager.isRotateAble)
+        {
+            Vector2 lookInput = inputManager.GetMouseDelta();
+            float mouseX = lookInput.x * rotationSpeed * Time.deltaTime;
+            transform.Rotate(Vector3.up * mouseX);
+        }
     }
 
     private void PlayerJump()
