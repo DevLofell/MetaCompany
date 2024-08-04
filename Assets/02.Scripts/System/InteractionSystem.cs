@@ -116,6 +116,7 @@ public class InteractionSystem : MonoBehaviour
         {
             case ObjectType.SHIP_LEVER:
                 // TODO: 회전, 위치 보간이동 > 회전은 계속, 위치는 일정 다가가면 고정
+                // 일단 E 누르자마자 씬이동
                 break;
             case ObjectType.SHIP_CONSOLE:
                 // TODO: 콘솔 전원 끄고 켜기
@@ -125,6 +126,7 @@ public class InteractionSystem : MonoBehaviour
                 break;
             case ObjectType.SHIP_CHARGER:
             case ObjectType.ITEM_ONEHAND:
+
             case ObjectType.ITEM_TWOHAND:
                 // 추가 동작이 필요한 경우 여기에 구현
                 break;
