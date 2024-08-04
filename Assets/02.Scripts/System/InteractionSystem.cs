@@ -24,7 +24,7 @@ public class InteractionSystem : MonoBehaviour
     private bool isMoving = false;
     private bool isRotating = false;
     private Coroutine inputDisableCoroutine;
-    private Transform originalFollowTarget; // 원래의 Follow 타겟
+    private Transform originalLookAtTarget;
     private Transform grabTr;
     private InteractableObject hitObject;
     private void Awake()
@@ -47,7 +47,7 @@ public class InteractionSystem : MonoBehaviour
         }
         else
         {
-            originalFollowTarget = virtualCamera.Follow;
+            originalLookAtTarget = virtualCamera.LookAt;
         }
 
         if (targetDir == null)
@@ -83,13 +83,7 @@ public class InteractionSystem : MonoBehaviour
                 uiManager.UpdateInteractionUI(hitObject.info, 1, false);
                 if (inputManager.PlayerInteractionThisFrame() && !isMoving && !isRotating)
                 {
-                    if (hitObject.standingTr != null && hitObject.lookAtDir != null)
-                    {
-                        targetPosition = hitObject.standingTr.position;
-                        targetRotation = hitObject.lookAtDir.localRotation;
-
-                        targetDir = hitObject.lookAtDir;
-                    }
+                    
                     // E를 눌렀을 때 상호작용 시퀀스 시작
                     StartCoroutine(InteractionSequence(hitObject));
 
@@ -110,14 +104,23 @@ public class InteractionSystem : MonoBehaviour
     private IEnumerator InteractionSequence(InteractableObject hitObject)
     {
         // 먼저 플레이어를 이동 및 회전
+        if (hitObject.standingTr != null && hitObject.lookAtDir != null)
+        {
+            targetPosition = hitObject.standingTr.position;
+            targetRotation = hitObject.lookAtDir.localRotation;
 
+            targetDir = hitObject.lookAtDir;
+        }
 
         // 플레이어 이동이 완료된 후 카메라 Follow 변경
         virtualCamera.LookAt = targetDir;
-        //virtualCamera.LookAt.forward = targetDir.forward - virtualCamera.LookAt.forward;
-        targetDir.position = hitObject.lookAtDir.position;
-        targetDir.rotation = hitObject.lookAtDir.rotation;
-
+        virtualCamera.LookAt.position = targetDir.position;
+        virtualCamera.LookAt.rotation = targetDir.rotation;
+        virtualCamera.LookAt = originalLookAtTarget;
+        //virtualCamera.LookAt.forward = targetDir.forward;
+        //targetDir.position = hitObject.lookAtDir.position;
+        //targetDir.rotation = hitObject.lookAtDir.rotation;
+        //transform.forward = hitObject.lookAtDir.TransformDirection(Vector3.forward);
         // 오브젝트 타입에 따른 추가 동작
         switch (hitObject.type)
         {
@@ -133,8 +136,9 @@ public class InteractionSystem : MonoBehaviour
                 uiManager.UpdateInteractionUI(1, 0, false);
                 consoleObj.SetActive(true);
                 inputManager.isRotateAble = false;
+                
                 yield return StartCoroutine(MoveAndRotatePlayer());
-                virtualCamera.LookAt = originalFollowTarget;
+                
                 break;
             case ObjectType.SHIP_CHARGER:
             case ObjectType.ITEM_ONEHAND:
