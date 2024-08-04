@@ -25,7 +25,8 @@ public class InteractionSystem : MonoBehaviour
     private bool isRotating = false;
     private Coroutine inputDisableCoroutine;
     private Transform originalFollowTarget; // 원래의 Follow 타겟
-
+    private Transform grabTr;
+    private InteractableObject hitObject;
     private void Awake()
     {
         interactableLayerMask = 1 << LayerMask.NameToLayer("Interactable");
@@ -36,6 +37,7 @@ public class InteractionSystem : MonoBehaviour
 
     private void Start()
     {
+        grabTr = GameObject.Find("GrabVec").GetComponent<Transform>();
         inputManager = InputManager.instance;
         uiManager = UIManager.instance;
 
@@ -56,7 +58,10 @@ public class InteractionSystem : MonoBehaviour
 
     private void Update()
     {
-        RaycastCenter();
+        if (inputManager.IsInputEnabled())
+        {
+            RaycastCenter();
+        }
     }
 
     private void CacheInteractableObjects()
@@ -72,7 +77,7 @@ public class InteractionSystem : MonoBehaviour
 
         if (hitDetected)
         {
-            InteractableObject hitObject = hit.collider.GetComponent<InteractableObject>();
+            hitObject = hit.collider.GetComponent<InteractableObject>();
             if (hitObject != null && hitObject.CompareTag("Interactable"))
             {
                 uiManager.UpdateInteractionUI(hitObject.info, 1, false);
@@ -103,7 +108,7 @@ public class InteractionSystem : MonoBehaviour
     private IEnumerator InteractionSequence(InteractableObject hitObject)
     {
         // 먼저 플레이어를 이동 및 회전
-        
+
 
         // 플레이어 이동이 완료된 후 카메라 Follow 변경
         //virtualCamera.LookAt = targetDir;
@@ -116,17 +121,25 @@ public class InteractionSystem : MonoBehaviour
         {
             case ObjectType.SHIP_LEVER:
                 // TODO: 회전, 위치 보간이동 > 회전은 계속, 위치는 일정 다가가면 고정
+                // 플레이어 상하회전은 고개를 직접 회전
                 // 일단 E 누르자마자 씬이동
+                inputManager.isRotateAble = false;
+                yield return StartCoroutine(MoveAndRotatePlayer());
                 break;
             case ObjectType.SHIP_CONSOLE:
                 // TODO: 콘솔 전원 끄고 켜기
+                uiManager.UpdateInteractionUI(1, 0, false);
                 consoleObj.SetActive(true);
                 inputManager.isRotateAble = false;
                 yield return StartCoroutine(MoveAndRotatePlayer());
                 break;
             case ObjectType.SHIP_CHARGER:
             case ObjectType.ITEM_ONEHAND:
+                // E 누르면 인벤토리 Image 저장
 
+                // 손의 좌표에 순간이동
+                hitObject.transform.Translate(grabTr.position);
+                break;
             case ObjectType.ITEM_TWOHAND:
                 // 추가 동작이 필요한 경우 여기에 구현
                 break;

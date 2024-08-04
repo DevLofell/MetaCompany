@@ -105,6 +105,7 @@ public class InputManager : MonoSingleton<InputManager>
     #region Input_Wheel
     public Vector2 InventorySwitching()
     {
+        if (!inputEnabled) return Vector2.zero;
         return playerControls.PlayerActions.MouseWheel.ReadValue<Vector2>();
     }
 

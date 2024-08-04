@@ -47,99 +47,103 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        
-        isGroundedPlayer = groundCheck.IsGrounded();
-        isSlopePlayer = groundCheck.IsSlope();
-
-        // 입력 및 이동 방향 계산
-        Vector2 movement = inputManager.GetPlayerMovement();
-        Vector3 moveDirection = Vector3.ProjectOnPlane(cameraTr.TransformDirection(new Vector3(movement.x, 0f, movement.y)), Vector3.up).normalized;
-        moveDirection.y = 0f;
-        if (isCrouch == false)
+        if (inputManager.IsInputEnabled())
         {
-            PlayerWalk(movement);
-        }
-        PlayerRun();
 
-        PlayerCrouching();
 
-        // 점프 처리
-        if (!stamina.isImpossibleJump)
-        {
-            if (inputManager.PlayerJumpedThisFrame() && ((isGroundedPlayer || isSlopePlayer) && !isCrouch))
+            isGroundedPlayer = groundCheck.IsGrounded();
+            isSlopePlayer = groundCheck.IsSlope();
+
+            // 입력 및 이동 방향 계산
+            Vector2 movement = inputManager.GetPlayerMovement();
+            Vector3 moveDirection = Vector3.ProjectOnPlane(cameraTr.TransformDirection(new Vector3(movement.x, 0f, movement.y)), Vector3.up).normalized;
+            moveDirection.y = 0f;
+            if (isCrouch == false)
             {
-                PlayerJump();
-                isJumpOnce = true;
-                anim.OnStand();
-                stamina.ChangeCoroutine("Increase");
+                PlayerWalk(movement);
             }
-        }
-        // 좌우 회전
-        Vector2 lookInput = inputManager.GetMouseDelta();
-        
-        //Quaternion targetRotation = Quaternion.LookRotation();
-        //transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 30f);
-        float mouseX = lookInput.x * rotationSpeed * Time.deltaTime;
-        transform.Rotate(Vector3.up * mouseX);
-        // 회전 처리
-        //Vector3 lookDirection = cameraTr.forward;
-        //lookDirection.y = 0f;
-        //if (lookDirection.magnitude > 0.1f)
-        //{
-        //    Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
-        //    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 30f);
-        //}
+            PlayerRun();
 
-        // 지면에 닿았을 때 y 속도 리셋
-        if (isGroundedPlayer && playerVelocity.y < 0)
-        {
-            if (!isLandingOnce)
+            PlayerCrouching();
+
+            // 점프 처리
+            if (!stamina.isImpossibleJump)
             {
-                if (inputManager.PlayerRan())
+                if (inputManager.PlayerJumpedThisFrame() && ((isGroundedPlayer || isSlopePlayer) && !isCrouch))
                 {
-                    stamina.ChangeCoroutine("Decrease");
+                    PlayerJump();
+                    isJumpOnce = true;
+                    anim.OnStand();
+                    stamina.ChangeCoroutine("Increase");
                 }
-                isLandingOnce = true;
-                sound.StartLanding();
             }
-            if (isJumpOnce == true)
-            {
-                anim.EndJump();
-                cc.height = 1.8f;
-                cc.center = new Vector3(0f, 0.88f, 0f);
-                isJumpOnce = false;
-            }
-            playerVelocity.y = -5f;
-        }
-        else if (!isGroundedPlayer && playerVelocity.y != 0)
-        {
-            isLandingOnce = false;
-        }
-        // 경사면 및 중력 처리
-        if (isSlopePlayer && !inputManager.PlayerJumpedThisFrame())
-        {
-            // 경사면에서의 이동
-            Vector3 slopeMovement = Vector3.ProjectOnPlane(moveDirection, groundCheck.rayHitNormal).normalized;
-            playerVelocity = slopeMovement * playerSpeed;
-        }
-        else
-        {
-            // 일반 지면 이동
-            if (isGroundedPlayer)
-            {
-                playerVelocity.x = moveDirection.x * playerSpeed;
-                playerVelocity.z = moveDirection.z * playerSpeed;
-            }
+            // 좌우 회전
+            Vector2 lookInput = inputManager.GetMouseDelta();
 
-            // 중력 적용
-            playerVelocity.y += gravity * gravityMultiplier * Time.deltaTime;
+            //Quaternion targetRotation = Quaternion.LookRotation();
+            //transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 30f);
+            float mouseX = lookInput.x * rotationSpeed * Time.deltaTime;
+            transform.Rotate(Vector3.up * mouseX);
+            // 회전 처리
+            //Vector3 lookDirection = cameraTr.forward;
+            //lookDirection.y = 0f;
+            //if (lookDirection.magnitude > 0.1f)
+            //{
+            //    Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
+            //    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 30f);
+            //}
+
+            // 지면에 닿았을 때 y 속도 리셋
+            if (isGroundedPlayer && playerVelocity.y < 0)
+            {
+                if (!isLandingOnce)
+                {
+                    if (inputManager.PlayerRan())
+                    {
+                        stamina.ChangeCoroutine("Decrease");
+                    }
+                    isLandingOnce = true;
+                    sound.StartLanding();
+                }
+                if (isJumpOnce == true)
+                {
+                    anim.EndJump();
+                    cc.height = 1.8f;
+                    cc.center = new Vector3(0f, 0.88f, 0f);
+                    isJumpOnce = false;
+                }
+                playerVelocity.y = -5f;
+            }
+            else if (!isGroundedPlayer && playerVelocity.y != 0)
+            {
+                isLandingOnce = false;
+            }
+            // 경사면 및 중력 처리
+            if (isSlopePlayer && !inputManager.PlayerJumpedThisFrame())
+            {
+                // 경사면에서의 이동
+                Vector3 slopeMovement = Vector3.ProjectOnPlane(moveDirection, groundCheck.rayHitNormal).normalized;
+                playerVelocity = slopeMovement * playerSpeed;
+            }
+            else
+            {
+                // 일반 지면 이동
+                if (isGroundedPlayer)
+                {
+                    playerVelocity.x = moveDirection.x * playerSpeed;
+                    playerVelocity.z = moveDirection.z * playerSpeed;
+                }
+
+                // 중력 적용
+                playerVelocity.y += gravity * gravityMultiplier * Time.deltaTime;
+            }
+            if (moveDirection.magnitude > 1f)
+            {
+                moveDirection.Normalize();
+            }
+            // 캐릭터 이동
+            cc.Move(playerVelocity * Time.deltaTime);
         }
-        if (moveDirection.magnitude > 1f)
-        {
-            moveDirection.Normalize();
-        }
-        // 캐릭터 이동
-        cc.Move(playerVelocity * Time.deltaTime);
     }
 
     private void PlayerJump()
