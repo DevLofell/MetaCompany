@@ -102,6 +102,11 @@ public class ConsoleManager : MonoBehaviour
         
         
     }
+    public void OnEnable()
+    {
+        currentState = ConsoleState.Normal;
+        LoadAndDisplayStartScreen();
+    }
     public IEnumerator Start()
     {
         if (File.Exists(COMMAND_FILE_PATH))
@@ -124,8 +129,8 @@ public class ConsoleManager : MonoBehaviour
             baseCommand = new BaseCommand();
         }
         yield return new WaitUntil(() => (commands != null));
-        LoadAndDisplayStartScreen();
 
+        LoadAndDisplayStartScreen();
     }
 
     

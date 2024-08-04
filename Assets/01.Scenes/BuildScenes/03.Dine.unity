@@ -4430,12 +4430,6 @@ MonoBehaviour:
   - sceneName: 01.Ship
     buildIndex: 1
     sceneAsset: {fileID: 102900000, guid: 6432b39381cd3aa4ebbe74da1ba642fc, type: 3}
-  - sceneName: 02.CompanyBuilding
-    buildIndex: 2
-    sceneAsset: {fileID: 102900000, guid: 1196e818d181fe141b67dcebf5b5bf8c, type: 3}
-  - sceneName: 03.Dine
-    buildIndex: 3
-    sceneAsset: {fileID: 102900000, guid: 40cb9f6d9c1f1254a9688aad5d9c8abd, type: 3}
 --- !u!4 &1049799818
 Transform:
   m_ObjectHideFlags: 0
