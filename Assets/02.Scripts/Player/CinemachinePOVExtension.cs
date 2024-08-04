@@ -11,15 +11,14 @@ public class CinemachinePOVExtension : CinemachineExtension
     private float clampUpAngle = 80f;
     [SerializeField]
     private float clampDownAngle = 30f;
-
     private Vector3 startingRotation;
-
     private CinemachineVirtualCamera vir;
 
     protected override void Awake()
     {
         base.Awake();
     }
+
     private void Start()
     {
         vir = GetComponent<CinemachineVirtualCamera>();
@@ -31,22 +30,23 @@ public class CinemachinePOVExtension : CinemachineExtension
         {
             if (stage == CinemachineCore.Stage.Aim)
             {
-                if (InputManager.instance.IsInputEnabled())
+                if (InputManager.instance.IsInputEnabled() && InputManager.instance.isRotateAble)
                 {
-                    if (startingRotation == null)
+                    if (startingRotation == Vector3.zero)
                     {
                         startingRotation = transform.localRotation.eulerAngles;
+                        if (startingRotation.x > 180f) startingRotation.x -= 360f;
                     }
                     Vector2 deltaInput = InputManager.instance.GetMouseDelta();
-                    startingRotation.x += deltaInput.x * horizontalSpeed * Time.deltaTime;
-                    startingRotation.y += deltaInput.y * verticalSpeed * Time.deltaTime;
-                    startingRotation.y = Mathf.Clamp(startingRotation.y, -clampDownAngle, clampUpAngle);
-                    state.RawOrientation = Quaternion.Euler(-startingRotation.y, startingRotation.x, 0f);
+                    startingRotation.y += deltaInput.x * horizontalSpeed * Time.deltaTime;
+                    startingRotation.x -= deltaInput.y * verticalSpeed * Time.deltaTime;
+                    startingRotation.x = Mathf.Clamp(startingRotation.x, -clampUpAngle, clampDownAngle);
+                    state.RawOrientation = Quaternion.Euler(startingRotation.x, startingRotation.y, 0f);
                 }
                 else
                 {
-                    //TODO : 나중에 상호작용이 끝나는 순간의 각도롤 적용
-                    startingRotation = new Vector3(90f, 0f, 0f);
+                    startingRotation = transform.localRotation.eulerAngles;
+                    if (startingRotation.x > 180f) startingRotation.x -= 360f;
                 }
             }
         }

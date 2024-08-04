@@ -49,8 +49,6 @@ public class PlayerController : MonoBehaviour
     {
         if (inputManager.IsInputEnabled())
         {
-
-
             isGroundedPlayer = groundCheck.IsGrounded();
             isSlopePlayer = groundCheck.IsSlope();
 
@@ -77,13 +75,10 @@ public class PlayerController : MonoBehaviour
                     stamina.ChangeCoroutine("Increase");
                 }
             }
-            // 좌우 회전
-            Vector2 lookInput = inputManager.GetMouseDelta();
-
+            
             //Quaternion targetRotation = Quaternion.LookRotation();
             //transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 30f);
-            float mouseX = lookInput.x * rotationSpeed * Time.deltaTime;
-            transform.Rotate(Vector3.up * mouseX);
+            
             // 회전 처리
             //Vector3 lookDirection = cameraTr.forward;
             //lookDirection.y = 0f;
@@ -144,6 +139,10 @@ public class PlayerController : MonoBehaviour
             // 캐릭터 이동
             cc.Move(playerVelocity * Time.deltaTime);
         }
+        // 좌우 회전
+        Vector2 lookInput = inputManager.GetMouseDelta();
+        float mouseX = lookInput.x * rotationSpeed * Time.deltaTime;
+        transform.Rotate(Vector3.up * mouseX);
     }
 
     private void PlayerJump()
