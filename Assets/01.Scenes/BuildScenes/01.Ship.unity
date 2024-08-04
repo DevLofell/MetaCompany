@@ -2101,37 +2101,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 263596240}
   m_SourcePrefab: {fileID: 100100000, guid: b6389b058d0213c409fc309b8e9d01ec, type: 3}
---- !u!1 &375694593
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 375694594}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &375694594
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 375694593}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.34461677, y: 1.179771, z: 5.1791496}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &380559775 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -46740545492902266, guid: b6389b058d0213c409fc309b8e9d01ec,
@@ -7198,29 +7167,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7028361085670721921, guid: 0c42cc8adc08be342918e39626cb5ac0,
         type: 3}
-      propertyPath: rayDistance
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7028361085670721921, guid: 0c42cc8adc08be342918e39626cb5ac0,
-        type: 3}
-      propertyPath: moveDuration
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7028361085670721921, guid: 0c42cc8adc08be342918e39626cb5ac0,
-        type: 3}
       propertyPath: virtualCamera
       value: 
       objectReference: {fileID: 853696484}
-    - target: {fileID: 7028361085670721921, guid: 0c42cc8adc08be342918e39626cb5ac0,
-        type: 3}
-      propertyPath: rotationDuration
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7028361085670721921, guid: 0c42cc8adc08be342918e39626cb5ac0,
-        type: 3}
-      propertyPath: inputDisableDuration
-      value: 0.1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7628,4 +7577,3 @@ SceneRoots:
   - {fileID: 666707407}
   - {fileID: 2116497097}
   - {fileID: 765308596}
-  - {fileID: 375694594}

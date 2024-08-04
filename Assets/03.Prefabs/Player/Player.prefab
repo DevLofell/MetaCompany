@@ -1273,7 +1273,7 @@ GameObject:
   - component: {fileID: 7028361085670721921}
   - component: {fileID: 362817943496584918}
   - component: {fileID: 3240612102149384393}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1425,9 +1425,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rayDistance: 2
-  moveDuration: 2
-  rotationDuration: 2
-  inputDisableDuration: 2
+  moveDuration: 0.1
+  rotationDuration: 0.1
+  inputDisableDuration: 0.1
   virtualCamera: {fileID: 0}
   targetDir: {fileID: 8724396357845804409}
 --- !u!95 &362817943496584918
@@ -1517,6 +1517,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: f2cf985f-9316-4392-a6ff-29aa1a401a16
     m_ActionName: PlayerActions/Interaction[/Keyboard/e]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 41206a03-144f-4f09-ae47-1db4e4b7a600
+    m_ActionName: PlayerActions/EndInteraction[/Keyboard/escape]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard_Mouse
   m_DefaultActionMap: PlayerActions
