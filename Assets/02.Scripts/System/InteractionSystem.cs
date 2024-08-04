@@ -83,11 +83,13 @@ public class InteractionSystem : MonoBehaviour
                 uiManager.UpdateInteractionUI(hitObject.info, 1, false);
                 if (inputManager.PlayerInteractionThisFrame() && !isMoving && !isRotating)
                 {
-                    targetPosition = hitObject.standingTr.position;
-                    targetRotation = hitObject.lookAtDir.localRotation;
+                    if (hitObject.standingTr != null && hitObject.lookAtDir != null)
+                    {
+                        targetPosition = hitObject.standingTr.position;
+                        targetRotation = hitObject.lookAtDir.localRotation;
 
-                    targetDir = hitObject.lookAtDir;
-
+                        targetDir = hitObject.lookAtDir;
+                    }
                     // E를 눌렀을 때 상호작용 시퀀스 시작
                     StartCoroutine(InteractionSequence(hitObject));
 
@@ -111,7 +113,7 @@ public class InteractionSystem : MonoBehaviour
 
 
         // 플레이어 이동이 완료된 후 카메라 Follow 변경
-        //virtualCamera.LookAt = targetDir;
+        virtualCamera.LookAt = targetDir;
         //virtualCamera.LookAt.forward = targetDir.forward - virtualCamera.LookAt.forward;
         targetDir.position = hitObject.lookAtDir.position;
         targetDir.rotation = hitObject.lookAtDir.rotation;
@@ -132,6 +134,7 @@ public class InteractionSystem : MonoBehaviour
                 consoleObj.SetActive(true);
                 inputManager.isRotateAble = false;
                 yield return StartCoroutine(MoveAndRotatePlayer());
+                virtualCamera.LookAt = originalFollowTarget;
                 break;
             case ObjectType.SHIP_CHARGER:
             case ObjectType.ITEM_ONEHAND:
@@ -147,7 +150,7 @@ public class InteractionSystem : MonoBehaviour
 
         // 일정 시간 후 원래의 Follow 타겟으로 복귀 (필요에 따라 조정 또는 제거)
         //yield return new WaitForSeconds(3f);
-        //virtualCamera.LookAt = originalFollowTarget;
+        
     }
 
     private IEnumerator MoveAndRotatePlayer()
@@ -167,8 +170,8 @@ public class InteractionSystem : MonoBehaviour
             float t = elapsedTime / Mathf.Max(moveDuration, rotationDuration);
 
             // 플레이어 이동 및 회전
-            transform.position = Vector3.Lerp(startPosition, targetPosition, t);
-            transform.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
+            gameObject.transform.position = Vector3.Lerp(startPosition, targetPosition, t);
+            gameObject.transform.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
 
             elapsedTime += Time.deltaTime;
             yield return null;
