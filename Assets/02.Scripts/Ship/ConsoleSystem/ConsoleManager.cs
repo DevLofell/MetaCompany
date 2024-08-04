@@ -114,6 +114,10 @@ public class ConsoleManager : MonoBehaviour
         RemoveInputFieldFocus();
         StopAllCoroutines();
     }
+    public void OnDestroy()
+    {
+        StopAllCoroutines();
+    }
     private void SetupInputFieldFocus()
     {
         if (inputField != null)

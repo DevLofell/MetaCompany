@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -13,6 +13,7 @@ using System.Collections.Generic;
 /// </summary>
 public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T>
 {
+    public bool isDontDestroyObject = false;
     private static T m_Instance = null;
     public static T instance
     {
@@ -67,7 +68,11 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T
         }
         if (!_isInitialized)
         {
-            DontDestroyOnLoad(gameObject);
+            if(isDontDestroyObject)
+            {
+                DontDestroyOnLoad(gameObject);
+
+            }
             _isInitialized = true;
             m_Instance.Init();
         }
