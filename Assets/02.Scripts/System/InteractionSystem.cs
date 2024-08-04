@@ -166,7 +166,10 @@ public class InteractionSystem : MonoBehaviour
             {
                 break;
             }
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 0.1f);
+
+            float newYRotation = Mathf.LerpAngle(transform.eulerAngles.y, targetRotation.eulerAngles.y, 0.1f);
+
+            transform.rotation = Quaternion.Euler(0f, newYRotation, 0f);
             yield return null;
         }
 
