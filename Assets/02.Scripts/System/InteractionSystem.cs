@@ -67,6 +67,10 @@ public class InteractionSystem : MonoBehaviour
         {
             RaycastCenter();
         }
+        if (inputManager.PlayerEndInteraction())
+        {
+            raycastAble = true;
+        }
     }
 
     private void CacheInteractableObjects()
@@ -110,6 +114,7 @@ public class InteractionSystem : MonoBehaviour
         else
         {
             uiManager.UpdateInteractionUI(0, 0, true);
+            
         }
     }
 
