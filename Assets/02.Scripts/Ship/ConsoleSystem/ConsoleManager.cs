@@ -107,6 +107,8 @@ public class ConsoleManager : MonoBehaviour
         currentState = ConsoleState.Normal;
         LoadAndDisplayStartScreen();
     }
+
+
     public IEnumerator Start()
     {
         if (File.Exists(COMMAND_FILE_PATH))
