@@ -124,9 +124,11 @@ public class InteractionSystem : MonoBehaviour
         {
             case ObjectType.SHIP_LEVER:
                 // TODO: 회전, 위치 보간이동 > 회전은 계속, 위치는 일정 다가가면 고정
+                // 일단 E 누르자마자 씬이동
                 break;
             case ObjectType.SHIP_CONSOLE:
                 // TODO: 콘솔 전원 끄고 켜기
+                consoleObj.SetActive(true);
                 inputManager.isRotateAble = false;
                 print(inputManager.isRotateAble);
                 isEndConsole = false;
@@ -135,6 +137,7 @@ public class InteractionSystem : MonoBehaviour
                 break;
             case ObjectType.SHIP_CHARGER:
             case ObjectType.ITEM_ONEHAND:
+
             case ObjectType.ITEM_TWOHAND:
                 // 추가 동작이 필요한 경우 여기에 구현
                 break;
@@ -176,9 +179,14 @@ public class InteractionSystem : MonoBehaviour
         {
             if (isEndConsole)
             {
+                consoleObj.SetActive(false);
+                inputManager.EnableInput(true);
                 break;
             }
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 0.1f);
+
+            float newYRotation = Mathf.LerpAngle(transform.eulerAngles.y, targetRotation.eulerAngles.y, 0.1f);
+
+            transform.rotation = Quaternion.Euler(0f, newYRotation, 0f);
             yield return null;
         }
         consoleObj.SetActive(false);
@@ -191,6 +199,5 @@ public class InteractionSystem : MonoBehaviour
     {
         inputManager.EnableInput(false);
         yield return new WaitForSeconds(inputDisableDuration);
-        //inputManager.EnableInput(true);
     }
 }

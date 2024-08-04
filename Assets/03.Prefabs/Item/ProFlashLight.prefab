@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6670843117407595412}
   - component: {fileID: 7356013876708468612}
   - component: {fileID: 7520203262005243061}
+  - component: {fileID: 201548887464756554}
   m_Layer: 0
   m_Name: ProFlashLight
   m_TagString: Untagged
@@ -68,6 +69,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: def464c7940b9334bbe3bac14eba3f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  info: 0
+--- !u!114 &201548887464756554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5715804130538067613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cac17222b7853648a576ed7ef4bb1cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 3
+  info: 0
+  standingTr: {fileID: 0}
+  lookAtDir: {fileID: 0}
 --- !u!1 &6954166126782281328
 GameObject:
   m_ObjectHideFlags: 0
