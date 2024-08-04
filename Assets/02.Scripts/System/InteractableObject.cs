@@ -13,4 +13,5 @@ public class InteractableObject : MonoBehaviour
     public ObjectType type;
     public int info;
     public Transform standingTr;
+    public Transform lookAtDir;
 }

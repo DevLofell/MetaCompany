@@ -1,8 +1,16 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
+using Cinemachine;
 
 public class InteractionSystem : MonoBehaviour
 {
     [SerializeField] private float rayDistance = 1f;
+    [SerializeField] private float moveDuration = 0.5f;
+    [SerializeField] private float rotationDuration = 0.5f;
+    [SerializeField] private float inputDisableDuration = 0.5f;
+    [SerializeField] private CinemachineVirtualCamera virtualCamera;
+    [SerializeField] private Transform targetDir; // 상호작용 시 Follow 타겟
+
     private int interactableLayerMask;
     private InteractableObject[] interactables;
     private Camera mainCamera;
@@ -10,6 +18,12 @@ public class InteractionSystem : MonoBehaviour
     private RaycastHit hit;
     private InputManager inputManager;
     private UIManager uiManager;
+    private Vector3 targetPosition;
+    private Quaternion targetRotation;
+    private bool isMoving = false;
+    private bool isRotating = false;
+    private Coroutine inputDisableCoroutine;
+    private Transform originalFollowTarget; // 원래의 Follow 타겟
 
     private void Awake()
     {
@@ -23,6 +37,20 @@ public class InteractionSystem : MonoBehaviour
     {
         inputManager = InputManager.instance;
         uiManager = UIManager.instance;
+
+        if (virtualCamera == null)
+        {
+            Debug.LogError("Virtual Camera is not assigned!");
+        }
+        else
+        {
+            originalFollowTarget = virtualCamera.Follow;
+        }
+
+        if (targetDir == null)
+        {
+            Debug.LogError("Target Dir is not assigned!");
+        }
     }
 
     private void Update()
@@ -39,33 +67,28 @@ public class InteractionSystem : MonoBehaviour
     {
         ray.origin = mainCamera.transform.position;
         ray.direction = mainCamera.transform.forward;
-
         bool hitDetected = Physics.Raycast(ray, out hit, rayDistance, interactableLayerMask);
-        
+
         if (hitDetected)
         {
             InteractableObject hitObject = hit.collider.GetComponent<InteractableObject>();
-            int index = hitObject.info;
             if (hitObject != null && hitObject.CompareTag("Interactable"))
             {
                 uiManager.UpdateInteractionUI(hitObject.info, 1, false);
-                if (inputManager.PlayerInteractionThisFrame())
+                if (inputManager.PlayerInteractionThisFrame() && !isMoving && !isRotating)
                 {
-                    switch (hitObject.type)
-                    {
-                        case ObjectType.SHIP_LEVER://TODO : 회전,위치 보간이동 > 회전은 계속, 위치는 일정 다가가면 고정
-                            gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, hitObject.standingTr.position, Time.deltaTime);
-                            break;
-                        case ObjectType.SHIP_CONSOLE://TODO : 콘솔 전원켜기
-                            gameObject.transform.position = hitObject.standingTr.position;
-                            break;
-                        case ObjectType.SHIP_CHARGER:
-                            break;
-                        case ObjectType.ITEM_ONEHAND:
-                            break;
-                        case ObjectType.ITEM_TWOHAND:
-                            break;
-                    }
+                    targetPosition = hitObject.standingTr.position;
+                    targetRotation = hitObject.standingTr.rotation;
+
+                    targetDir = hitObject.lookAtDir;
+
+                    // E를 눌렀을 때 상호작용 시퀀스 시작
+                    StartCoroutine(InteractionSequence(hitObject));
+
+                    // 입력 비활성화
+                    if (inputDisableCoroutine != null)
+                        StopCoroutine(inputDisableCoroutine);
+                    inputDisableCoroutine = StartCoroutine(DisableInputTemporarily());
                 }
                 return;
             }
@@ -74,5 +97,81 @@ public class InteractionSystem : MonoBehaviour
         {
             uiManager.UpdateInteractionUI(0, 0, true);
         }
+    }
+
+    private IEnumerator InteractionSequence(InteractableObject hitObject)
+    {
+        // 먼저 플레이어를 이동 및 회전
+        yield return StartCoroutine(MoveAndRotatePlayer());
+
+        // 플레이어 이동이 완료된 후 카메라 Follow 변경
+        virtualCamera.LookAt = targetDir;
+        targetDir.position = hitObject.lookAtDir.position;
+        targetDir.rotation = hitObject.lookAtDir.rotation;
+
+        // 오브젝트 타입에 따른 추가 동작
+        switch (hitObject.type)
+        {
+            case ObjectType.SHIP_LEVER:
+                // TODO: 회전, 위치 보간이동 > 회전은 계속, 위치는 일정 다가가면 고정
+                break;
+            case ObjectType.SHIP_CONSOLE:
+                // TODO: 콘솔 전원 끄고 켜기
+                break;
+            case ObjectType.SHIP_CHARGER:
+            case ObjectType.ITEM_ONEHAND:
+            case ObjectType.ITEM_TWOHAND:
+                // 추가 동작이 필요한 경우 여기에 구현
+                break;
+        }
+
+        // 일정 시간 후 원래의 Follow 타겟으로 복귀 (필요에 따라 조정 또는 제거)
+        //yield return new WaitForSeconds(3f);
+        //virtualCamera.LookAt = originalFollowTarget;
+    }
+
+    private IEnumerator MoveAndRotatePlayer()
+    {
+        isMoving = true;
+        isRotating = true;
+
+        Vector3 startPosition = transform.position;
+        Quaternion startRotation = transform.rotation;
+        Vector3 startTargetDirPosition = targetDir.position;
+        Quaternion startTargetDirRotation = targetDir.rotation;
+
+        float elapsedTime = 0f;
+
+        while (elapsedTime < Mathf.Max(moveDuration, rotationDuration))
+        {
+            float t = elapsedTime / Mathf.Max(moveDuration, rotationDuration);
+
+            // 플레이어 이동 및 회전
+            transform.position = Vector3.Lerp(startPosition, targetPosition, t);
+            transform.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
+
+            // TargetDir 이동 및 회전
+            targetDir.position = Vector3.Lerp(startTargetDirPosition, targetPosition, t);
+            targetDir.rotation = Quaternion.Slerp(startTargetDirRotation, targetRotation, t);
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // 최종 위치와 회전 설정
+        transform.position = targetPosition;
+        transform.rotation = targetRotation;
+        targetDir.position = targetPosition;
+        targetDir.rotation = targetRotation;
+
+        isMoving = false;
+        isRotating = false;
+    }
+
+    private IEnumerator DisableInputTemporarily()
+    {
+        //inputManager.EnableInput(false);
+        yield return new WaitForSeconds(inputDisableDuration);
+        //inputManager.EnableInput(true);
     }
 }

@@ -7,7 +7,7 @@ public class InputManager : MonoSingleton<InputManager>
 {
     private MainInputActions playerControls;
     public bool inputCrouch = false;
-
+    private bool inputEnabled = true;
     private void Awake()
     {
         playerControls = new MainInputActions();
@@ -35,8 +35,21 @@ public class InputManager : MonoSingleton<InputManager>
     #region Input_Look
     public Vector2 GetMouseDelta()
     {
+        if (!inputEnabled) return Vector2.zero;
+        
         return playerControls.PlayerActions.Look.ReadValue<Vector2>();
     }
+
+    public void EnableInput(bool enable)
+    {
+        inputEnabled = enable;
+    }
+
+    public bool IsInputEnabled()
+    {
+        return inputEnabled;
+    }
+
     #endregion
 
     #region Input_Jump
