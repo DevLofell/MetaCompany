@@ -89,6 +89,15 @@ public partial class @MainInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""EndInteraction"",
+                    ""type"": ""Button"",
+                    ""id"": ""41206a03-144f-4f09-ae47-1db4e4b7a600"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -212,6 +221,17 @@ public partial class @MainInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Interaction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""330ef602-0b36-4fa1-a0ea-cf02ce9b1f50"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard_Mouse"",
+                    ""action"": ""EndInteraction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -233,6 +253,7 @@ public partial class @MainInputActions: IInputActionCollection2, IDisposable
         m_PlayerActions_Crouching = m_PlayerActions.FindAction("Crouching", throwIfNotFound: true);
         m_PlayerActions_MouseWheel = m_PlayerActions.FindAction("MouseWheel", throwIfNotFound: true);
         m_PlayerActions_Interaction = m_PlayerActions.FindAction("Interaction", throwIfNotFound: true);
+        m_PlayerActions_EndInteraction = m_PlayerActions.FindAction("EndInteraction", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -301,6 +322,7 @@ public partial class @MainInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerActions_Crouching;
     private readonly InputAction m_PlayerActions_MouseWheel;
     private readonly InputAction m_PlayerActions_Interaction;
+    private readonly InputAction m_PlayerActions_EndInteraction;
     public struct PlayerActionsActions
     {
         private @MainInputActions m_Wrapper;
@@ -312,6 +334,7 @@ public partial class @MainInputActions: IInputActionCollection2, IDisposable
         public InputAction @Crouching => m_Wrapper.m_PlayerActions_Crouching;
         public InputAction @MouseWheel => m_Wrapper.m_PlayerActions_MouseWheel;
         public InputAction @Interaction => m_Wrapper.m_PlayerActions_Interaction;
+        public InputAction @EndInteraction => m_Wrapper.m_PlayerActions_EndInteraction;
         public InputActionMap Get() { return m_Wrapper.m_PlayerActions; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -342,6 +365,9 @@ public partial class @MainInputActions: IInputActionCollection2, IDisposable
             @Interaction.started += instance.OnInteraction;
             @Interaction.performed += instance.OnInteraction;
             @Interaction.canceled += instance.OnInteraction;
+            @EndInteraction.started += instance.OnEndInteraction;
+            @EndInteraction.performed += instance.OnEndInteraction;
+            @EndInteraction.canceled += instance.OnEndInteraction;
         }
 
         private void UnregisterCallbacks(IPlayerActionsActions instance)
@@ -367,6 +393,9 @@ public partial class @MainInputActions: IInputActionCollection2, IDisposable
             @Interaction.started -= instance.OnInteraction;
             @Interaction.performed -= instance.OnInteraction;
             @Interaction.canceled -= instance.OnInteraction;
+            @EndInteraction.started -= instance.OnEndInteraction;
+            @EndInteraction.performed -= instance.OnEndInteraction;
+            @EndInteraction.canceled -= instance.OnEndInteraction;
         }
 
         public void RemoveCallbacks(IPlayerActionsActions instance)
@@ -402,5 +431,6 @@ public partial class @MainInputActions: IInputActionCollection2, IDisposable
         void OnCrouching(InputAction.CallbackContext context);
         void OnMouseWheel(InputAction.CallbackContext context);
         void OnInteraction(InputAction.CallbackContext context);
+        void OnEndInteraction(InputAction.CallbackContext context);
     }
 }

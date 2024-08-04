@@ -78,7 +78,7 @@ public class InteractionSystem : MonoBehaviour
                 if (inputManager.PlayerInteractionThisFrame() && !isMoving && !isRotating)
                 {
                     targetPosition = hitObject.standingTr.position;
-                    targetRotation = hitObject.standingTr.rotation;
+                    targetRotation = hitObject.lookAtDir.localRotation;
 
                     targetDir = hitObject.lookAtDir;
 
@@ -102,10 +102,11 @@ public class InteractionSystem : MonoBehaviour
     private IEnumerator InteractionSequence(InteractableObject hitObject)
     {
         // 먼저 플레이어를 이동 및 회전
-        yield return StartCoroutine(MoveAndRotatePlayer());
+        
 
         // 플레이어 이동이 완료된 후 카메라 Follow 변경
-        virtualCamera.LookAt = targetDir;
+        //virtualCamera.LookAt = targetDir;
+        //virtualCamera.LookAt.forward = targetDir.forward - virtualCamera.LookAt.forward;
         targetDir.position = hitObject.lookAtDir.position;
         targetDir.rotation = hitObject.lookAtDir.rotation;
 
@@ -117,6 +118,8 @@ public class InteractionSystem : MonoBehaviour
                 break;
             case ObjectType.SHIP_CONSOLE:
                 // TODO: 콘솔 전원 끄고 켜기
+                inputManager.isRotateAble = false;
+                yield return StartCoroutine(MoveAndRotatePlayer());
                 break;
             case ObjectType.SHIP_CHARGER:
             case ObjectType.ITEM_ONEHAND:
@@ -150,10 +153,6 @@ public class InteractionSystem : MonoBehaviour
             transform.position = Vector3.Lerp(startPosition, targetPosition, t);
             transform.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
 
-            // TargetDir 이동 및 회전
-            targetDir.position = Vector3.Lerp(startTargetDirPosition, targetPosition, t);
-            targetDir.rotation = Quaternion.Slerp(startTargetDirRotation, targetRotation, t);
-
             elapsedTime += Time.deltaTime;
             yield return null;
         }
@@ -161,8 +160,15 @@ public class InteractionSystem : MonoBehaviour
         // 최종 위치와 회전 설정
         transform.position = targetPosition;
         transform.rotation = targetRotation;
-        targetDir.position = targetPosition;
-        targetDir.rotation = targetRotation;
+        while (true)
+        {
+            if (inputManager.PlayerEndInteraction())
+            {
+                break;
+            }
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 0.1f);
+            yield return null;
+        }
 
         isMoving = false;
         isRotating = false;
