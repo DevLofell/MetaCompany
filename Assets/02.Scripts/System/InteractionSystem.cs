@@ -10,6 +10,7 @@ public class InteractionSystem : MonoBehaviour
     [SerializeField] private float inputDisableDuration = 0.5f;
     [SerializeField] private CinemachineVirtualCamera virtualCamera;
     [SerializeField] private Transform targetDir; // 상호작용 시 Follow 타겟
+    [SerializeField] private GameObject consoleObj;
 
     private int interactableLayerMask;
     private InteractableObject[] interactables;
@@ -118,6 +119,7 @@ public class InteractionSystem : MonoBehaviour
                 break;
             case ObjectType.SHIP_CONSOLE:
                 // TODO: 콘솔 전원 끄고 켜기
+                consoleObj.SetActive(true);
                 inputManager.isRotateAble = false;
                 yield return StartCoroutine(MoveAndRotatePlayer());
                 break;
@@ -164,6 +166,8 @@ public class InteractionSystem : MonoBehaviour
         {
             if (inputManager.PlayerEndInteraction())
             {
+                consoleObj.SetActive(false);
+                inputManager.EnableInput(true);
                 break;
             }
 
@@ -179,8 +183,7 @@ public class InteractionSystem : MonoBehaviour
 
     private IEnumerator DisableInputTemporarily()
     {
-        //inputManager.EnableInput(false);
+        inputManager.EnableInput(false);
         yield return new WaitForSeconds(inputDisableDuration);
-        //inputManager.EnableInput(true);
     }
 }

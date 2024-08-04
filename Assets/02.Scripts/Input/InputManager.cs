@@ -29,6 +29,7 @@ public class InputManager : MonoSingleton<InputManager>
     #region Input_Move
     public Vector2 GetPlayerMovement()
     {
+        if (!inputEnabled) return Vector2.zero;
         return playerControls.PlayerActions.Movement.ReadValue<Vector2>();
     }
     #endregion
@@ -36,8 +37,6 @@ public class InputManager : MonoSingleton<InputManager>
     #region Input_Look
     public Vector2 GetMouseDelta()
     {
-        if (!inputEnabled) return Vector2.zero;
-        
         return playerControls.PlayerActions.Look.ReadValue<Vector2>();
     }
 
