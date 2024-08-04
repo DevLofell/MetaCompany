@@ -30,7 +30,7 @@ public class PlayerMove : MonoBehaviour
 
     void Start()
     {
-        yVelocity = 0;
+
         cc = GetComponent<CharacterController>();
     }
 

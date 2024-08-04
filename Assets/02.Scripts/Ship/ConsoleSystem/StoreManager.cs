@@ -17,7 +17,7 @@ public class ItemDataList
     public List<ItemData> regularItems;
     public List<ItemData> shipUpgrades;
     public List<ItemData> specialItems;
-}
+}  
 
 public class StoreManager : SubCommand
 {
