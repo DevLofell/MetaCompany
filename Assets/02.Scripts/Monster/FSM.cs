@@ -55,6 +55,8 @@ public class FSM : MonoBehaviour
     // player 방향 콕 알기
     Vector3 player_p;
 
+  
+
     void Start()
     {
         // 현재 게임 오브젝트에서 Animator 컴포넌트를 찾는다.
@@ -102,7 +104,6 @@ public class FSM : MonoBehaviour
 
     void Update()
     {
-        
         switch (currentState)
         {
             case EEnemyState.WalkClam:
@@ -125,7 +126,6 @@ public class FSM : MonoBehaviour
 
     void ChangState(EEnemyState state)
     {
-        Debug.Log(currentState + ">>" +state.ToString());
         currentState = state;
 
         switch (currentState)
@@ -145,7 +145,7 @@ public class FSM : MonoBehaviour
             case EEnemyState.Attack:
                 animator.SetBool("Chase_", false);
                 animator.SetBool("Attack_", true);
-                agent.isStopped = true; // 공격 중 정지
+                // agent.isStopped = true; // 공격 중 
                 break;
         }
     }
@@ -176,29 +176,42 @@ public class FSM : MonoBehaviour
         return randomPosition;
     }
 
+    private float rotationDuration = 7f; // 회전에 걸리는 시간 (초)
+    private float rotationStartTime; // 회전 시작 시간
+
     void UpdateRotate()
     {
-        // Ensure we have calculated the lookRotation once at the start
-        if (Quaternion.Angle(transform.rotation, lookRotation) > 0.1f)
+        // 회전 시작 시간이 설정되지 않았다면 현재 시간으로 설정
+        if (rotationStartTime == 0)
         {
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 50);
+            rotationStartTime = Time.time;
         }
 
-        float angle = Quaternion.Angle(transform.rotation, lookRotation);
-        //print("Current angle: " + angle);  // 현재 각도 출력
+        // 경과 시간 계산
+        float elapsedTime = Time.time - rotationStartTime;
+        float t = Mathf.Clamp01(elapsedTime / rotationDuration);
 
-        // If the angle is small enough, consider the rotation complete
-        if (angle < 0.1f)
+        // Slerp를 사용하여 부드럽게 회전
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, t);
+
+        // 현재 각도 계산
+        float angle = Quaternion.Angle(transform.rotation, lookRotation);
+        print("Current angle: " + angle);
+
+        // 회전이 완료되었거나 시간이 다 되었을 때
+        if (angle < 0.1f || t >= 1)
         {
-            print("회전 완료!");  // 회전 완료 시 출력
+            print("회전 완료!");
+            rotationStartTime = 0; // 회전 시작 시간 리셋
+
             if ((radius / 2) <= dir.magnitude)
             {
-                print("Chase 상태로 전환");  // Chase 상태로 전환 시 출력
+                print("Chase 상태로 전환");
                 ChangState(EEnemyState.Chase_);
             }
             else
             {
-                print("Attack 상태로 전환");  // Attack 상태로 전환 시 출력
+                print("Attack 상태로 전환");
                 ChangState(EEnemyState.Attack);
             }
         }
@@ -249,7 +262,7 @@ public class FSM : MonoBehaviour
 
         // 여기서 바로 가는 구나
 
-        if ((radius / 3) > agent.remainingDistance)
+        if ((radius / 1.5) > agent.remainingDistance)
         {
             ChangState(EEnemyState.Attack);
         }
@@ -257,21 +270,24 @@ public class FSM : MonoBehaviour
 
     void Attack()
     {
-
-        animator.SetBool("Attack_", false);
-        agent.isStopped = false;
-
-        // 일단 start 부분에서 눈 없는 개 무작정 돌아다니게 하기
-
-        animator.SetBool("WalkClam", true);
-        ChangState(EEnemyState.WalkClam);
-
+        agent.SetDestination(player_p);
+        if(agent.remainingDistance > 0.1)
+        {
+            agent.SetDestination(player_p);
+        }
+        else
+        {
+            animator.SetBool("WalkClam", true);
+            ChangState(EEnemyState.WalkClam);
+        }
     }
 
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.name.Contains("Capsule"))
         {
+            
+
             // 여기서 player 방향을 콕 찍어서 알기
             player_p = player.transform.position;
 
