@@ -25,15 +25,15 @@ public class CinemachinePOVExtension : CinemachineExtension
         {
             if (stage == CinemachineCore.Stage.Aim)
             {
-                if (startingRotation == null)
-                {
-                    startingRotation = transform.localRotation.eulerAngles;
-                }
-                Vector2 deltaInput = InputManager.instance.GetMouseDelta();
-                startingRotation.x += deltaInput.x * horizontalSpeed * Time.deltaTime;
-                startingRotation.y += deltaInput.y * verticalSpeed * Time.deltaTime;
-                startingRotation.y = Mathf.Clamp(startingRotation.y, -clampDownAngle, clampUpAngle);
-                state.RawOrientation = Quaternion.Euler(-startingRotation.y, startingRotation.x, 0f);
+                //if (startingRotation == null)
+                //{
+                //    startingRotation = transform.localRotation.eulerAngles;
+                //}
+                //Vector2 deltaInput = InputManager.instance.GetMouseDelta();
+                //startingRotation.x += deltaInput.x * horizontalSpeed * Time.deltaTime;
+                //startingRotation.y += deltaInput.y * verticalSpeed * Time.deltaTime;
+                //startingRotation.y = Mathf.Clamp(startingRotation.y, -clampDownAngle, clampUpAngle);
+                //state.RawOrientation = Quaternion.Euler(-startingRotation.y, startingRotation.x, 0f);
             }
         }
     }

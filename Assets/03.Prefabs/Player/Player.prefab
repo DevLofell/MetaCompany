@@ -1423,7 +1423,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff9e5aaf57c9f734185d975948e42b72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rayDistance: 3
+  rayDistance: 2
+  moveDuration: 0.1
+  rotationDuration: 0.1
+  inputDisableDuration: 0.1
+  virtualCamera: {fileID: 0}
+  targetDir: {fileID: 8724396357845804409}
 --- !u!95 &362817943496584918
 Animator:
   serializedVersion: 5
@@ -1516,6 +1521,37 @@ MonoBehaviour:
   m_DefaultActionMap: PlayerActions
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!1 &3943534126626938438
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3053400069423691658}
+  m_Layer: 0
+  m_Name: CameraTargetDirection
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3053400069423691658
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3943534126626938438}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.175, y: 1, z: 0.007}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 627223421904923193}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3957912927470522270
 GameObject:
   m_ObjectHideFlags: 0
@@ -4399,6 +4435,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 8724396357845804409}
+    - targetCorrespondingSourceObject: {fileID: -8751967285836141228, guid: c5cab1f610dee6b4b976670fcf620233,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3053400069423691658}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c5cab1f610dee6b4b976670fcf620233, type: 3}
 --- !u!4 &627223421904923193 stripped

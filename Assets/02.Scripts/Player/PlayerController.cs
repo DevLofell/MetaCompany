@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour
     private float jumpForce = 2f;
     [SerializeField]
     private float gravity = -9.81f;
+    [SerializeField]
+    private float rotationSpeed = 0.001f;
 
     private GroundCheck groundCheck;
     private CharacterController cc;
@@ -72,15 +74,22 @@ public class PlayerController : MonoBehaviour
                 stamina.ChangeCoroutine("Increase");
             }
         }
-
+        // 좌우 회전
+        Vector2 lookInput = inputManager.GetMouseDelta();
+        
+        //Quaternion targetRotation = Quaternion.LookRotation();
+        //transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 30f);
+        float mouseX = lookInput.x * rotationSpeed * Time.deltaTime;
+        transform.Rotate(Vector3.up * mouseX);
         // 회전 처리
-        Vector3 lookDirection = cameraTr.forward;
-        lookDirection.y = 0f;
-        if (lookDirection.magnitude > 0.1f)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 30f);
-        }
+        //Vector3 lookDirection = cameraTr.forward;
+        //lookDirection.y = 0f;
+        //if (lookDirection.magnitude > 0.1f)
+        //{
+        //    Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
+        //    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 30f);
+        //}
+
         // 지면에 닿았을 때 y 속도 리셋
         if (isGroundedPlayer && playerVelocity.y < 0)
         {
