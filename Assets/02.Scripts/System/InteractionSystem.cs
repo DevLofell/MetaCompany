@@ -29,6 +29,7 @@ public class InteractionSystem : MonoBehaviour
     private InteractableObject hitObject;
 
     private PlayerAnimation anim;
+    private InventorySystem inven;
 
     private void Awake()
     {
@@ -40,6 +41,7 @@ public class InteractionSystem : MonoBehaviour
 
     private void Start()
     {
+        inven = GetComponent<InventorySystem>();
         anim = GetComponent<PlayerAnimation>();
         inputManager = InputManager.instance;
         uiManager = UIManager.instance;
@@ -58,10 +60,10 @@ public class InteractionSystem : MonoBehaviour
             Debug.LogError("Target Dir is not assigned!");
         }
     }
-
+    bool raycastAble = true;
     private void Update()
     {
-        if (inputManager.IsInputEnabled())
+        if (inputManager.IsInputEnabled() && raycastAble)
         {
             RaycastCenter();
         }
@@ -86,13 +88,21 @@ public class InteractionSystem : MonoBehaviour
                 uiManager.UpdateInteractionUI(hitObject.info, 1, false);
                 if (inputManager.PlayerInteractionThisFrame() && !isMoving && !isRotating)
                 {
-                    // E를 눌렀을 때 상호작용 시퀀스 시작
-                    StartCoroutine(InteractionSequence(hitObject));
+                    if (hitObject == null)
+                    {
+                        print("hit");
+                    }
+                    else
+                    {
+                        // E를 눌렀을 때 상호작용 시퀀스 시작
+                        StartCoroutine(InteractionSequence(hitObject));
+                    }
+
 
                     // 입력 비활성화
                     if (inputDisableCoroutine != null)
                         StopCoroutine(inputDisableCoroutine);
-                    
+                    raycastAble = false;
                 }
                 return;
             }
@@ -133,7 +143,6 @@ public class InteractionSystem : MonoBehaviour
                 virtualCamera.LookAt = originalLookAtTarget;
                 break;
             case ObjectType.SHIP_CONSOLE:
-                // TODO: 콘솔 전원 끄고 켜기
                 inputDisableCoroutine = StartCoroutine(DisableInputTemporarily());
                 uiManager.UpdateInteractionUI(1, 0, false);
                 consoleObj.SetActive(true);
@@ -144,12 +153,16 @@ public class InteractionSystem : MonoBehaviour
                 break;
             case ObjectType.SHIP_CHARGER:
             case ObjectType.ITEM_ONEHAND:
+                // TODO: 휠 돌리면 애니메이션 내려가면서 아이템도 안나오게
+                //g키 누르면 아이템 떨구게
+                uiManager.UpdateInteractionUI(0, 0, false);
                 // E 누르면 인벤토리 Image 저장
-
+                inven.PutIndexInventory(hitObject.gameObject, hitObject.icon);
                 // 손의 좌표에 순간이동
                 hitObject.transform.position = grabObj.transform.position;
                 
                 hitObject.transform.SetParent(grabObj.transform);
+                hitObject.GetComponent<BoxCollider>().enabled = false;
                 anim.IsOneHand();
 
                 break;
@@ -208,6 +221,7 @@ public class InteractionSystem : MonoBehaviour
     private IEnumerator DisableInputTemporarily()
     {
         inputManager.EnableInput(false);
+        
         yield return new WaitForSeconds(inputDisableDuration);
     }
 }
