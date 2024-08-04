@@ -8,6 +8,7 @@ public class InputManager : MonoSingleton<InputManager>
     private MainInputActions playerControls;
     public bool inputCrouch = false;
     private bool inputEnabled = true;
+    public bool isRotateAble = true;
     private void Awake()
     {
         playerControls = new MainInputActions();
@@ -28,6 +29,7 @@ public class InputManager : MonoSingleton<InputManager>
     #region Input_Move
     public Vector2 GetPlayerMovement()
     {
+        if (!inputEnabled) return Vector2.zero;
         return playerControls.PlayerActions.Movement.ReadValue<Vector2>();
     }
     #endregion
@@ -35,8 +37,6 @@ public class InputManager : MonoSingleton<InputManager>
     #region Input_Look
     public Vector2 GetMouseDelta()
     {
-        if (!inputEnabled) return Vector2.zero;
-        
         return playerControls.PlayerActions.Look.ReadValue<Vector2>();
     }
 
@@ -123,6 +123,12 @@ public class InputManager : MonoSingleton<InputManager>
     public bool PlayerInteractionThisFrame()
     {
         return playerControls.PlayerActions.Interaction.triggered;
+    }
+
+    public bool PlayerEndInteraction()
+    {
+        isRotateAble = true;
+        return playerControls.PlayerActions.EndInteraction.triggered;
     }
     #endregion
 }

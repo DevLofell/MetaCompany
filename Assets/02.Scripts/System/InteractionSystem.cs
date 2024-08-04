@@ -10,6 +10,7 @@ public class InteractionSystem : MonoBehaviour
     [SerializeField] private float inputDisableDuration = 0.5f;
     [SerializeField] private CinemachineVirtualCamera virtualCamera;
     [SerializeField] private Transform targetDir; // 상호작용 시 Follow 타겟
+    [SerializeField] private GameObject consoleObj;
 
     private int interactableLayerMask;
     private InteractableObject[] interactables;
@@ -78,7 +79,7 @@ public class InteractionSystem : MonoBehaviour
                 if (inputManager.PlayerInteractionThisFrame() && !isMoving && !isRotating)
                 {
                     targetPosition = hitObject.standingTr.position;
-                    targetRotation = hitObject.standingTr.rotation;
+                    targetRotation = hitObject.lookAtDir.localRotation;
 
                     targetDir = hitObject.lookAtDir;
 
@@ -102,10 +103,11 @@ public class InteractionSystem : MonoBehaviour
     private IEnumerator InteractionSequence(InteractableObject hitObject)
     {
         // 먼저 플레이어를 이동 및 회전
-        yield return StartCoroutine(MoveAndRotatePlayer());
+        
 
         // 플레이어 이동이 완료된 후 카메라 Follow 변경
-        virtualCamera.LookAt = targetDir;
+        //virtualCamera.LookAt = targetDir;
+        //virtualCamera.LookAt.forward = targetDir.forward - virtualCamera.LookAt.forward;
         targetDir.position = hitObject.lookAtDir.position;
         targetDir.rotation = hitObject.lookAtDir.rotation;
 
@@ -114,12 +116,17 @@ public class InteractionSystem : MonoBehaviour
         {
             case ObjectType.SHIP_LEVER:
                 // TODO: 회전, 위치 보간이동 > 회전은 계속, 위치는 일정 다가가면 고정
+                // 일단 E 누르자마자 씬이동
                 break;
             case ObjectType.SHIP_CONSOLE:
                 // TODO: 콘솔 전원 끄고 켜기
+                consoleObj.SetActive(true);
+                inputManager.isRotateAble = false;
+                yield return StartCoroutine(MoveAndRotatePlayer());
                 break;
             case ObjectType.SHIP_CHARGER:
             case ObjectType.ITEM_ONEHAND:
+
             case ObjectType.ITEM_TWOHAND:
                 // 추가 동작이 필요한 경우 여기에 구현
                 break;
@@ -150,10 +157,6 @@ public class InteractionSystem : MonoBehaviour
             transform.position = Vector3.Lerp(startPosition, targetPosition, t);
             transform.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
 
-            // TargetDir 이동 및 회전
-            targetDir.position = Vector3.Lerp(startTargetDirPosition, targetPosition, t);
-            targetDir.rotation = Quaternion.Slerp(startTargetDirRotation, targetRotation, t);
-
             elapsedTime += Time.deltaTime;
             yield return null;
         }
@@ -161,8 +164,20 @@ public class InteractionSystem : MonoBehaviour
         // 최종 위치와 회전 설정
         transform.position = targetPosition;
         transform.rotation = targetRotation;
-        targetDir.position = targetPosition;
-        targetDir.rotation = targetRotation;
+        while (true)
+        {
+            if (inputManager.PlayerEndInteraction())
+            {
+                consoleObj.SetActive(false);
+                inputManager.EnableInput(true);
+                break;
+            }
+
+            float newYRotation = Mathf.LerpAngle(transform.eulerAngles.y, targetRotation.eulerAngles.y, 0.1f);
+
+            transform.rotation = Quaternion.Euler(0f, newYRotation, 0f);
+            yield return null;
+        }
 
         isMoving = false;
         isRotating = false;
@@ -170,8 +185,7 @@ public class InteractionSystem : MonoBehaviour
 
     private IEnumerator DisableInputTemporarily()
     {
-        //inputManager.EnableInput(false);
+        inputManager.EnableInput(false);
         yield return new WaitForSeconds(inputDisableDuration);
-        //inputManager.EnableInput(true);
     }
 }
