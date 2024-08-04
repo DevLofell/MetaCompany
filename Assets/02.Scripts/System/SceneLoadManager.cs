@@ -8,11 +8,7 @@ using UnityEditor.SceneManagement;
 using UnityEditor;
 #endif
 
-public enum SceneList : int
-{
-    Mainmenu = 0,
-    Ship = 1,
-}
+
 
 [System.Serializable]
 public class SceneInfo
