@@ -36,10 +36,26 @@ public class FSM : MonoBehaviour
     // 플레이어 방향 구하기 전역 변수
     Vector3 dir;
 
-    // 플레이어 방향으로 회전하는 전역 변수
+    // 플레이어 방향으로 회전하기 위해  어느정도 돌아야 하는 지 구하는 전역 변수
     Quaternion lookRotation;
 
-    PlayerMove play_health;
+    // 플레이어의 최대 체력
+    public PlayerMove play_health;
+
+    // 콜라이더 컴포넌트
+    SphereCollider scollider;
+
+    // 콜라이더의 라디어스 값
+    float radius;
+
+
+    // walk clam의 setDestination 남은 거리 
+    public float remaindistnace2;
+
+    // player 방향 콕 알기
+    Vector3 player_p;
+
+  
 
     void Start()
     {
@@ -50,44 +66,39 @@ public class FSM : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
 
         // NavMeshSurface 바운딩 박스를 설정한다.
-        NavMeshSurface navMeshSurface = FindObjectOfType<NavMeshSurface>(); 
-        // 외부에서 갖고 온건 전역 변수 선언해서 start에서 초기화 하는 것 보다 Find 관련 함수를 통해서 갖고 온다.
+        NavMeshSurface navMeshSurface = FindObjectOfType<NavMeshSurface>();
 
         // 플레이어 찾기
-        player = GameObject.Find("player");
+        player = GameObject.Find("Capsule");
 
+        // 플레이어의 체력 관련 메서드 가져오기
         play_health = player.GetComponent<PlayerMove>();
+
+        // 원형 콜라이더  갖고 오기
+        scollider = GetComponent<SphereCollider>();
+
+        // 원형 콜라이더의 반지름
+        radius = scollider.radius;
 
         // NavMeshSurface 경계를 가져온다.
         if (navMeshSurface != null)
         {
-            navMeshBounds = navMeshSurface.navMeshData.sourceBounds; 
+            navMeshBounds = navMeshSurface.navMeshData.sourceBounds;
         }
+
+        // 애니메이터 작동하기
+        animator.SetBool("WalkClam", true);
+
 
         NavMeshHit hit;
 
+        // 일단 start 부분에서 눈 없는 개 무작정 돌아다니게 하기
         if (NavMesh.SamplePosition(RandomPositionSetting(), out hit, navMeshBounds.size.magnitude, 1))
         {
-            // 플레이어 방향 찾기
-            dir = player.transform.position - transform.position;
-
-            // 플레이어 방향으로 회전
-            lookRotation = Quaternion.LookRotation(dir);
-
-            if (Quaternion.Angle(transform.rotation, lookRotation) < 5)
-
-            {
-                animator.SetBool("WalkClam", false);
-                animator.SetBool("Chase_", true);
-                ChangState(EEnemyState.Chase_);
-            }
-            else
-            {
-                agent.SetDestination(hit.position);
-            }
+            agent.SetDestination(hit.position);
         }
 
-        animator.SetBool("WalkClam", true);
+
     }
 
 
@@ -95,7 +106,6 @@ public class FSM : MonoBehaviour
     {
         switch (currentState)
         {
-
             case EEnemyState.WalkClam:
                 UpdateWalkClam();
                 break;
@@ -104,13 +114,13 @@ public class FSM : MonoBehaviour
                 UpdateRotate();
                 break;
 
-            case EEnemyState.Chase_: 
+            case EEnemyState.Chase_:
                 UpdateChase_Check();
                 break;
-                /*
+
             case EEnemyState.Attack:
+                Attack();
                 break;
-                */
         }
     }
 
@@ -120,43 +130,36 @@ public class FSM : MonoBehaviour
 
         switch (currentState)
         {
-            case EEnemyState.Chase_:
-                agent.enabled = true;
+            case EEnemyState.Rotate_:
+                animator.SetBool("WalkClam", false);
+                animator.SetBool("Rotate_", true);
+                agent.isStopped = true; // 회전 중에는 정지
                 break;
+
+            case EEnemyState.Chase_:
+                animator.SetBool("Rotate_", false);
+                animator.SetBool("Chase_", true);
+                agent.isStopped = false; // 추적 시작
+                break;
+
             case EEnemyState.Attack:
-                Attack();
+                animator.SetBool("Chase_", false);
+                animator.SetBool("Attack_", true);
+                // agent.isStopped = true; // 공격 중 
                 break;
         }
-        // 현재 상태를 state 값으로 설정
-
     }
-
     void UpdateWalkClam()
     {
-        if(agent.remainingDistance < 30f)
+        remaindistnace2 = 0.5f;
+
+        if (agent.remainingDistance < remaindistnace2)
         {
             NavMeshHit hit;
 
             if (NavMesh.SamplePosition(RandomPositionSetting(), out hit, navMeshBounds.size.magnitude, 1))
             {
-                // 플레이어 방향 찾기
-                dir = player.transform.position - transform.position;
-
-                // 플레이어 방향으로 회전
-                lookRotation = Quaternion.LookRotation(dir); 
-
-                if (Quaternion.Angle(transform.rotation, lookRotation) < 10) 
-
-                {
-                    animator.SetBool("WalkClam", false);
-                    animator.SetBool("Chase_", true);
-                    ChangState(EEnemyState.Chase_);
-                }
-                else
-                {
-                    agent.SetDestination(hit.position);                                   
-                }
-
+                agent.SetDestination(hit.position);
             }
         }
     }
@@ -173,81 +176,146 @@ public class FSM : MonoBehaviour
         return randomPosition;
     }
 
+    private float rotationDuration = 7f; // 회전에 걸리는 시간 (초)
+    private float rotationStartTime; // 회전 시작 시간
+
     void UpdateRotate()
     {
-
-        // 플레이어 방향 찾기
-        dir = player.transform.position - transform.position;
-
-        // 플레이어 방향으로 회전
-        lookRotation = Quaternion.LookRotation(dir); 
-
-        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 20f * Time.deltaTime);
-
-        if (Quaternion.Angle(transform.rotation, lookRotation) < 10) 
+        // 회전 시작 시간이 설정되지 않았다면 현재 시간으로 설정
+        if (rotationStartTime == 0)
         {
-            if(dir.magnitude > 200) 
-            {
-                animator.SetBool("Rotate_", false);
-                animator.SetBool("Chase_", true);
+            rotationStartTime = Time.time;
+        }
 
-                // print(dir.magnitude + "회전 거리");
+        // 경과 시간 계산
+        float elapsedTime = Time.time - rotationStartTime;
+        float t = Mathf.Clamp01(elapsedTime / rotationDuration);
+
+        // Slerp를 사용하여 부드럽게 회전
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, t);
+
+        // 현재 각도 계산
+        float angle = Quaternion.Angle(transform.rotation, lookRotation);
+        print("Current angle: " + angle);
+
+        // 회전이 완료되었거나 시간이 다 되었을 때
+        if (angle < 0.1f || t >= 1)
+        {
+            print("회전 완료!");
+            rotationStartTime = 0; // 회전 시작 시간 리셋
+
+            if ((radius / 2) <= dir.magnitude)
+            {
+                print("Chase 상태로 전환");
                 ChangState(EEnemyState.Chase_);
             }
             else
             {
-                animator.SetBool("Rotate_", false);
-                animator.SetBool("Attack_", true);
-
-                // print(dir.magnitude + "회전 거리");
+                print("Attack 상태로 전환");
                 ChangState(EEnemyState.Attack);
-
-
             }
-
         }
+
+
+        /*
+
+        // 여기서 player 방향을 콕 찍어서 알기
+        player_p = player.transform.position;
+
+        // 플레이어 방향 찾기
+        dir = player.transform.position - transform.position;
+
+        // 플레이어 방향까지 구하기
+        lookRotation = Quaternion.LookRotation(dir);
+
+        print(Quaternion.Angle(transform.rotation, lookRotation));
+
+        // 실시간으로 플레이어를 체크 하지 말고 딱 처음 봤을 때만 하기
+
+        // 정면에서 봤을 경우
+        if (Quaternion.Angle(transform.rotation, lookRotation) > 10)
+        {
+            // 만약에 콜라이더 안에서도 일정 거리가 있을 경우 추격
+            if ((radius / 2) < dir.magnitude)
+            {
+                animator.SetBool("Chase_", true);
+                ChangState(EEnemyState.Chase_);
+            }
+            else // 콜라이더 안에서도 가까울 경우 바로 공격
+            {
+                
+                animator.SetBool("Attack", true);
+                ChangState(EEnemyState.Attack);
+            }
+        }*/
     }
 
     private void UpdateChase_Check()
     {
-        agent.SetDestination(player.transform.position);
+        agent.SetDestination(player_p);
         // 플레이어 방향 찾기
-        Vector3 pos = player.transform.position;
-        pos.y = transform.position.y;
-        dir = pos - transform.position;
-        print(dir.magnitude);
-        //if (agent.remainingDistance < 50)
+        // Vector3 pos = player.transform.position;
+        // pos.y = transform.position.y;
+        // dir = pos - transform.position;
+
+        // print(agent.remainingDistance);
+
+        // 여기서 바로 가는 구나
+
+        if ((radius / 1.5) > agent.remainingDistance)
         {
-            if(dir.magnitude < 200)
-            {
-                animator.SetBool("Chase_", false);
-                animator.SetBool("Attack_", true);
-                ChangState(EEnemyState.Attack);
-                
-            }
+            ChangState(EEnemyState.Attack);
         }
     }
 
     void Attack()
     {
-        // 플레이어 방향 찾기
-        dir = player.transform.position - transform.position;
-
-        if (dir.magnitude < 200)
+        agent.SetDestination(player_p);
+        if(agent.remainingDistance > 0.1)
         {
-            play_health.TakeDamage(play_health.health);
+            agent.SetDestination(player_p);
+        }
+        else
+        {
+            animator.SetBool("WalkClam", true);
+            ChangState(EEnemyState.WalkClam);
         }
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.name.Contains("player"))
+        if (other.gameObject.name.Contains("Capsule"))
         {
-            agent.enabled = false;
+            
 
-            animator.SetBool("WalkClam", false);
-            animator.SetBool("Rotate_", true);
-            ChangState(EEnemyState.Rotate_); 
+            // 여기서 player 방향을 콕 찍어서 알기
+            player_p = player.transform.position;
+
+            // 플레이어 방향 찾기
+            dir = player_p - transform.position;
+
+            dir.y = 0;
+
+            // 플레이어 방향까지 구하기
+            lookRotation = Quaternion.LookRotation(dir);
+
+            // 측면에서 봤을 경우
+            if (Quaternion.Angle(transform.rotation, lookRotation) >= 10)
+            {
+                ChangState(EEnemyState.Rotate_);
+            }
+            // 정면에서 봤을 경우 
+            else
+            {
+                if ((radius / 2) <= dir.magnitude)
+                {
+                    ChangState(EEnemyState.Chase_);
+                }
+                else
+                {
+                    ChangState(EEnemyState.Attack);
+                }
+            }
         }
     }
 }
