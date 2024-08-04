@@ -4,6 +4,7 @@ using System.ComponentModel.Design.Serialization;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Unity.AI.Navigation;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -55,6 +56,12 @@ public class FSM : MonoBehaviour
     // player 방향 콕 알기
     Vector3 player_p;
 
+
+    // 추격 중인지 아닌지
+    bool isChasing;
+
+    // 공격 중인지 아닌지
+    bool isAttacking;
   
 
     void Start()
@@ -134,18 +141,31 @@ public class FSM : MonoBehaviour
                 animator.SetBool("WalkClam", false);
                 animator.SetBool("Rotate_", true);
                 agent.isStopped = true; // 회전 중에는 정지
+                isChasing = false;
+                isAttacking = false;
                 break;
 
             case EEnemyState.Chase_:
                 animator.SetBool("Rotate_", false);
                 animator.SetBool("Chase_", true);
                 agent.isStopped = false; // 추적 시작
+                isChasing = true;
+                isAttacking = false;
                 break;
 
             case EEnemyState.Attack:
                 animator.SetBool("Chase_", false);
                 animator.SetBool("Attack_", true);
-                // agent.isStopped = true; // 공격 중 
+                isChasing = false;
+                isAttacking = true;
+                break;
+
+            case EEnemyState.WalkClam:
+                animator.SetBool("WalkClam", true);
+                animator.SetBool("Chase_", false);
+                animator.SetBool("Attack_", false);
+                isChasing = false;
+                isAttacking = false;
                 break;
         }
     }
@@ -215,39 +235,6 @@ public class FSM : MonoBehaviour
                 ChangState(EEnemyState.Attack);
             }
         }
-
-
-        /*
-
-        // 여기서 player 방향을 콕 찍어서 알기
-        player_p = player.transform.position;
-
-        // 플레이어 방향 찾기
-        dir = player.transform.position - transform.position;
-
-        // 플레이어 방향까지 구하기
-        lookRotation = Quaternion.LookRotation(dir);
-
-        print(Quaternion.Angle(transform.rotation, lookRotation));
-
-        // 실시간으로 플레이어를 체크 하지 말고 딱 처음 봤을 때만 하기
-
-        // 정면에서 봤을 경우
-        if (Quaternion.Angle(transform.rotation, lookRotation) > 10)
-        {
-            // 만약에 콜라이더 안에서도 일정 거리가 있을 경우 추격
-            if ((radius / 2) < dir.magnitude)
-            {
-                animator.SetBool("Chase_", true);
-                ChangState(EEnemyState.Chase_);
-            }
-            else // 콜라이더 안에서도 가까울 경우 바로 공격
-            {
-                
-                animator.SetBool("Attack", true);
-                ChangState(EEnemyState.Attack);
-            }
-        }*/
     }
 
     private void UpdateChase_Check()
@@ -266,55 +253,69 @@ public class FSM : MonoBehaviour
         {
             ChangState(EEnemyState.Attack);
         }
-    }
 
-    void Attack()
-    {
-        agent.SetDestination(player_p);
-        if(agent.remainingDistance > 0.1)
+        else if (agent.remainingDistance < 0.1f)
         {
-            agent.SetDestination(player_p);
-        }
-        else
-        {
+            // 목표 지점에 도달했을 때
+            isChasing = false;
             animator.SetBool("WalkClam", true);
             ChangState(EEnemyState.WalkClam);
         }
     }
 
+    void Attack()
+    {
+        agent.SetDestination(initialTargetPosition);
+        if (agent.remainingDistance > 0.1f)
+        {
+            agent.SetDestination(initialTargetPosition);
+        }
+        else
+        {
+            // 목표 지점에 도달했을 때
+            isAttacking = false;
+            animator.SetBool("WalkClam", true);
+            ChangState(EEnemyState.WalkClam);
+        }
+    }
+
+    private Vector3 initialTargetPosition;
+
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.name.Contains("Capsule"))
         {
-            
-
-            // 여기서 player 방향을 콕 찍어서 알기
-            player_p = player.transform.position;
-
-            // 플레이어 방향 찾기
-            dir = player_p - transform.position;
-
-            dir.y = 0;
-
-            // 플레이어 방향까지 구하기
-            lookRotation = Quaternion.LookRotation(dir);
-
-            // 측면에서 봤을 경우
-            if (Quaternion.Angle(transform.rotation, lookRotation) >= 10)
+            if (!isChasing && !isAttacking)
             {
-                ChangState(EEnemyState.Rotate_);
-            }
-            // 정면에서 봤을 경우 
-            else
-            {
-                if ((radius / 2) <= dir.magnitude)
+                // 추격이나 공격 중이 아닐 때만 새로운 목표 위치 설정
+                player_p = player.transform.position;
+                initialTargetPosition = player_p;
+
+                dir = player_p - transform.position;
+                dir.y = 0;
+
+                lookRotation = Quaternion.LookRotation(dir);
+
+                if (Quaternion.Angle(transform.rotation, lookRotation) >= 10)
                 {
-                    ChangState(EEnemyState.Chase_);
+                    ChangState(EEnemyState.Rotate_);
                 }
                 else
                 {
-                    ChangState(EEnemyState.Attack);
+                    if ((radius / 2) <= dir.magnitude)
+                    {
+                        ChangState(EEnemyState.Chase_);
+                    }
+                    else
+                    {
+                        ChangState(EEnemyState.Attack);
+                    }
                 }
+            }
+            else
+            {
+                // 추격 중이나 공격 중일 때는 initialTargetPosition을 계속 사용
+                agent.SetDestination(initialTargetPosition);
             }
         }
     }
