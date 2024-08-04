@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InventorySystem : MonoBehaviour
 {
@@ -14,8 +15,10 @@ public class InventorySystem : MonoBehaviour
     private bool canChange = true;
     private Coroutine coroutine;
 
+    private UIManager uiManager;
     private void Start()
     {
+        uiManager = UIManager.instance;
         inputManager = InputManager.instance;
         waitScrollingDelay = new WaitForSeconds(scrollingDelay);
     }
@@ -48,9 +51,21 @@ public class InventorySystem : MonoBehaviour
         {
             curInventoryContainerNum--;
         }
-
         curInventoryContainerNum = (curInventoryContainerNum+4) % 4;
-        UIManager.instance.UpdateInventoryUI(curInventoryContainerNum);
+        UIManager.instance.ResizeInventoryUI(curInventoryContainerNum);
+    }
+
+    public void PutIndexInventory(GameObject obj, Sprite icon)
+    {
+        if (obj == null)
+        {
+            print("inven");
+        }
+        else
+        {
+            inventory[curInventoryContainerNum] = obj.gameObject;
+            UIManager.instance.PutInInventoryUI(curInventoryContainerNum, icon);
+        }
     }
 
     

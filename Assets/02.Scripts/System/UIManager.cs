@@ -14,11 +14,13 @@ public class UIManager : MonoSingleton<UIManager>
     private int originIdx = 0;
     private float lerpSpeed = 7.5f; // 크기 변경 속도 조절
     private Coroutine[] resizeCoroutines;
+    public Canvas canvas;
 
     private void Start()
     {
-        staminaImage = GameObject.Find("StaminaGauge").GetComponent<Image>();
         resizeCoroutines = new Coroutine[inventoryUI.Count];
+        staminaImage = GameObject.Find("StaminaGauge").GetComponent<Image>();
+        
         UpdateInteractionUI(0, 0, true);
     }
 
@@ -30,7 +32,7 @@ public class UIManager : MonoSingleton<UIManager>
     #endregion
 
     #region InventoryManage
-    public void UpdateInventoryUI(int idx)
+    public void ResizeInventoryUI(int idx)
     {
         if (originIdx != idx)
         {
@@ -73,6 +75,25 @@ public class UIManager : MonoSingleton<UIManager>
         else
         {
             interactionUI[idx].GetComponent<CanvasGroup>().alpha = alpha;
+        }
+    }
+
+    public void PutInInventoryUI(int idx, Sprite sprite)
+    {
+        if (sprite == null)
+        {
+            print("UI");
+        }
+        else
+        {
+            GameObject slotObject = inventoryUI[idx];
+            Image slotImage = slotObject.GetComponentInChildren<Image>();
+
+            GameObject imageObject = new GameObject("ItemImage");
+            imageObject.transform.SetParent(inventoryUI[idx].transform, false);
+            slotImage = imageObject.AddComponent<Image>();
+            slotImage.rectTransform.sizeDelta = new Vector2(30f, 30f);
+            slotImage.sprite = sprite;
         }
     }
 }
