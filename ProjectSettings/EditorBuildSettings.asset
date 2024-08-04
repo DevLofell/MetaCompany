@@ -15,7 +15,7 @@ EditorBuildSettings:
     path: Assets/01.Scenes/BuildScenes/02.CompanyBuilding.unity
     guid: 1196e818d181fe141b67dcebf5b5bf8c
   - enabled: 1
-    path: Assets/01.Scenes/BuildScenes/03,Rend.unity
+    path: Assets/01.Scenes/BuildScenes/03.Rend.unity
     guid: 8ae6430a5b1f8d645970aeb0fbcc6ff4
   - enabled: 1
     path: Assets/01.Scenes/BuildScenes/04.Mansion.unity

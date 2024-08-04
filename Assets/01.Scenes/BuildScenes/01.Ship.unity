@@ -2695,6 +2695,66 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 9065976560284444830, guid: b6389b058d0213c409fc309b8e9d01ec, type: 3}
+--- !u!1 &527604093
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 527604094}
+  - component: {fileID: 527604095}
+  m_Layer: 0
+  m_Name: SceneLoadManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &527604094
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 527604093}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2116497097}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &527604095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 527604093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22fd88782a94034489f4d5d214e0354d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneList:
+  - sceneName: 00.MainMenu
+    buildIndex: 0
+    sceneAsset: {fileID: 102900000, guid: 99c9720ab356a0642a771bea13969a05, type: 3}
+  - sceneName: 01.Ship
+    buildIndex: 1
+    sceneAsset: {fileID: 102900000, guid: 6432b39381cd3aa4ebbe74da1ba642fc, type: 3}
+  - sceneName: 02.CompanyBuilding
+    buildIndex: 2
+    sceneAsset: {fileID: 102900000, guid: 1196e818d181fe141b67dcebf5b5bf8c, type: 3}
+  - sceneName: 03.Rend
+    buildIndex: 3
+    sceneAsset: {fileID: 102900000, guid: 8ae6430a5b1f8d645970aeb0fbcc6ff4, type: 3}
+  - sceneName: 04.Mansion
+    buildIndex: 4
+    sceneAsset: {fileID: 102900000, guid: 6b54bde35d290a1419c25462cec2c861, type: 3}
 --- !u!1 &562601148 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4118722407639877273, guid: b6389b058d0213c409fc309b8e9d01ec,
@@ -3937,7 +3997,11 @@ MonoBehaviour:
     easeplanets: []
     normalplanets: []
     hardplanets: []
-  assetlist: []
+  assetlist:
+  - {fileID: 102900000, guid: 6432b39381cd3aa4ebbe74da1ba642fc, type: 3}
+  - {fileID: 102900000, guid: 1196e818d181fe141b67dcebf5b5bf8c, type: 3}
+  - {fileID: 102900000, guid: 8ae6430a5b1f8d645970aeb0fbcc6ff4, type: 3}
+  - {fileID: 102900000, guid: 6b54bde35d290a1419c25462cec2c861, type: 3}
   referencelist: []
 --- !u!1 &853696482
 GameObject:
@@ -6780,6 +6844,7 @@ Transform:
   - {fileID: 841651317}
   - {fileID: 1294207225}
   - {fileID: 477612402}
+  - {fileID: 527604094}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2145832817 stripped
