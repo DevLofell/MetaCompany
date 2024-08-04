@@ -10,6 +10,7 @@ public class InteractionSystem : MonoBehaviour
     [SerializeField] private float inputDisableDuration = 0.5f;
     [SerializeField] private CinemachineVirtualCamera virtualCamera;
     [SerializeField] private Transform targetDir; // 상호작용 시 Follow 타겟
+    [SerializeField] private GameObject consoleObj;
 
     private int interactableLayerMask;
     private InteractableObject[] interactables;
@@ -22,6 +23,7 @@ public class InteractionSystem : MonoBehaviour
     private Quaternion targetRotation;
     private bool isMoving = false;
     private bool isRotating = false;
+    private bool isEndConsole = false;
     private Coroutine inputDisableCoroutine;
     private Transform originalFollowTarget; // 원래의 Follow 타겟
 
@@ -35,6 +37,7 @@ public class InteractionSystem : MonoBehaviour
 
     private void Start()
     {
+        consoleObj.SetActive(false);
         inputManager = InputManager.instance;
         uiManager = UIManager.instance;
 
@@ -56,6 +59,12 @@ public class InteractionSystem : MonoBehaviour
     private void Update()
     {
         RaycastCenter();
+        if (inputManager.PlayerEndInteraction())
+        {
+            isEndConsole = true;
+            inputManager.isRotateAble = true;
+            virtualCamera.LookAt = originalFollowTarget;
+        }
     }
 
     private void CacheInteractableObjects()
@@ -119,6 +128,9 @@ public class InteractionSystem : MonoBehaviour
             case ObjectType.SHIP_CONSOLE:
                 // TODO: 콘솔 전원 끄고 켜기
                 inputManager.isRotateAble = false;
+                print(inputManager.isRotateAble);
+                isEndConsole = false;
+                consoleObj.SetActive(true);
                 yield return StartCoroutine(MoveAndRotatePlayer());
                 break;
             case ObjectType.SHIP_CHARGER:
@@ -162,21 +174,22 @@ public class InteractionSystem : MonoBehaviour
         transform.rotation = targetRotation;
         while (true)
         {
-            if (inputManager.PlayerEndInteraction())
+            if (isEndConsole)
             {
                 break;
             }
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 0.1f);
             yield return null;
         }
-
+        consoleObj.SetActive(false);
+        
         isMoving = false;
         isRotating = false;
     }
 
     private IEnumerator DisableInputTemporarily()
     {
-        //inputManager.EnableInput(false);
+        inputManager.EnableInput(false);
         yield return new WaitForSeconds(inputDisableDuration);
         //inputManager.EnableInput(true);
     }

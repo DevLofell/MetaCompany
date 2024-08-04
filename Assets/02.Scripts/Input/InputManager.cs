@@ -128,7 +128,6 @@ public class InputManager : MonoSingleton<InputManager>
 
     public bool PlayerEndInteraction()
     {
-        isRotateAble = true;
         return playerControls.PlayerActions.EndInteraction.triggered;
     }
     #endregion
