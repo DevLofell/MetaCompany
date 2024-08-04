@@ -25,8 +25,11 @@ public class InteractionSystem : MonoBehaviour
     private bool isRotating = false;
     private Coroutine inputDisableCoroutine;
     private Transform originalLookAtTarget;
-    private Transform grabTr;
+    public GameObject grabObj;
     private InteractableObject hitObject;
+
+    private PlayerAnimation anim;
+
     private void Awake()
     {
         interactableLayerMask = 1 << LayerMask.NameToLayer("Interactable");
@@ -37,7 +40,7 @@ public class InteractionSystem : MonoBehaviour
 
     private void Start()
     {
-        grabTr = GameObject.Find("GrabVec").GetComponent<Transform>();
+        anim = GetComponent<PlayerAnimation>();
         inputManager = InputManager.instance;
         uiManager = UIManager.instance;
 
@@ -83,14 +86,13 @@ public class InteractionSystem : MonoBehaviour
                 uiManager.UpdateInteractionUI(hitObject.info, 1, false);
                 if (inputManager.PlayerInteractionThisFrame() && !isMoving && !isRotating)
                 {
-                    
                     // E를 눌렀을 때 상호작용 시퀀스 시작
                     StartCoroutine(InteractionSequence(hitObject));
 
                     // 입력 비활성화
                     if (inputDisableCoroutine != null)
                         StopCoroutine(inputDisableCoroutine);
-                    inputDisableCoroutine = StartCoroutine(DisableInputTemporarily());
+                    
                 }
                 return;
             }
@@ -110,17 +112,13 @@ public class InteractionSystem : MonoBehaviour
             targetRotation = hitObject.lookAtDir.localRotation;
 
             targetDir = hitObject.lookAtDir;
+            // 플레이어 이동이 완료된 후 카메라 Follow 변경
+            virtualCamera.LookAt = targetDir;
+            virtualCamera.LookAt.position = targetDir.position;
+            virtualCamera.LookAt.rotation = targetDir.rotation;
+            virtualCamera.LookAt = originalLookAtTarget;
         }
 
-        // 플레이어 이동이 완료된 후 카메라 Follow 변경
-        virtualCamera.LookAt = targetDir;
-        virtualCamera.LookAt.position = targetDir.position;
-        virtualCamera.LookAt.rotation = targetDir.rotation;
-        virtualCamera.LookAt = originalLookAtTarget;
-        //virtualCamera.LookAt.forward = targetDir.forward;
-        //targetDir.position = hitObject.lookAtDir.position;
-        //targetDir.rotation = hitObject.lookAtDir.rotation;
-        //transform.forward = hitObject.lookAtDir.TransformDirection(Vector3.forward);
         // 오브젝트 타입에 따른 추가 동작
         switch (hitObject.type)
         {
@@ -128,11 +126,15 @@ public class InteractionSystem : MonoBehaviour
                 // TODO: 회전, 위치 보간이동 > 회전은 계속, 위치는 일정 다가가면 고정
                 // 플레이어 상하회전은 고개를 직접 회전
                 // 일단 E 누르자마자 씬이동
+                inputDisableCoroutine = StartCoroutine(DisableInputTemporarily());
                 inputManager.isRotateAble = false;
+                virtualCamera.LookAt = targetDir;
                 yield return StartCoroutine(MoveAndRotatePlayer());
+                virtualCamera.LookAt = originalLookAtTarget;
                 break;
             case ObjectType.SHIP_CONSOLE:
                 // TODO: 콘솔 전원 끄고 켜기
+                inputDisableCoroutine = StartCoroutine(DisableInputTemporarily());
                 uiManager.UpdateInteractionUI(1, 0, false);
                 consoleObj.SetActive(true);
                 inputManager.isRotateAble = false;
@@ -145,16 +147,16 @@ public class InteractionSystem : MonoBehaviour
                 // E 누르면 인벤토리 Image 저장
 
                 // 손의 좌표에 순간이동
-                hitObject.transform.Translate(grabTr.position);
+                hitObject.transform.position = grabObj.transform.position;
+                
+                hitObject.transform.SetParent(grabObj.transform);
+                anim.IsOneHand();
+
                 break;
             case ObjectType.ITEM_TWOHAND:
                 // 추가 동작이 필요한 경우 여기에 구현
                 break;
         }
-
-        // 일정 시간 후 원래의 Follow 타겟으로 복귀 (필요에 따라 조정 또는 제거)
-        //yield return new WaitForSeconds(3f);
-        
     }
 
     private IEnumerator MoveAndRotatePlayer()
@@ -164,38 +166,38 @@ public class InteractionSystem : MonoBehaviour
 
         Vector3 startPosition = transform.position;
         Quaternion startRotation = transform.rotation;
-        Vector3 startTargetDirPosition = targetDir.position;
-        Quaternion startTargetDirRotation = targetDir.rotation;
 
         float elapsedTime = 0f;
 
         while (elapsedTime < Mathf.Max(moveDuration, rotationDuration))
         {
             float t = elapsedTime / Mathf.Max(moveDuration, rotationDuration);
-
-            // 플레이어 이동 및 회전
             gameObject.transform.position = Vector3.Lerp(startPosition, targetPosition, t);
             gameObject.transform.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
-
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
-        // 최종 위치와 회전 설정
         transform.position = targetPosition;
         transform.rotation = targetRotation;
+
         while (true)
         {
             if (inputManager.PlayerEndInteraction())
             {
                 consoleObj.SetActive(false);
                 inputManager.EnableInput(true);
+                inputManager.isRotateAble = true;
                 break;
             }
 
-            float newYRotation = Mathf.LerpAngle(transform.eulerAngles.y, targetRotation.eulerAngles.y, 0.1f);
+            // 콘솔 화면만 보게 돌려주는 기능 추가
+            if (hitObject.type == ObjectType.SHIP_CONSOLE)
+            {
+                float newYRotation = Mathf.LerpAngle(transform.eulerAngles.y, targetRotation.eulerAngles.y, 0.1f);
+                transform.rotation = Quaternion.Euler(0f, newYRotation, 0f);
+            }
 
-            transform.rotation = Quaternion.Euler(0f, newYRotation, 0f);
             yield return null;
         }
 

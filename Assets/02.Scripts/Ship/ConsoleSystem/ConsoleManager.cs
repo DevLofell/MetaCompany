@@ -469,7 +469,7 @@ public class ConsoleManager : MonoBehaviour
                 }
             }
 
-            Debug.Log("모니터 출력 :" + message);
+            //Debug.Log("모니터 출력 :" + message);
             //내보낼 인스턴스
             GameObject outIns = Instantiate(outputPrefab, monitor);
             outIns.transform.SetSiblingIndex(Spacer.transform.GetSiblingIndex() + 1);
