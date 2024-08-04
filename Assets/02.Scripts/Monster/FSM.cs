@@ -62,7 +62,11 @@ public class FSM : MonoBehaviour
 
     // 공격 중인지 아닌지
     bool isAttacking;
-  
+
+    public float walkSpeed = 0.2f;
+    public float chaseSpeed = 1f;
+    public float attackSpeed = 1.5f;
+
 
     void Start()
     {
@@ -93,17 +97,17 @@ public class FSM : MonoBehaviour
             navMeshBounds = navMeshSurface.navMeshData.sourceBounds;
         }
 
-        // 애니메이터 작동하기
-        animator.SetBool("WalkClam", true);
-
-
         NavMeshHit hit;
 
         // 일단 start 부분에서 눈 없는 개 무작정 돌아다니게 하기
         if (NavMesh.SamplePosition(RandomPositionSetting(), out hit, navMeshBounds.size.magnitude, 1))
         {
             agent.SetDestination(hit.position);
+            agent.speed = walkSpeed;
         }
+
+        // 애니메이터 작동하기
+        animator.SetBool("WalkClam", true);
 
 
     }
@@ -149,6 +153,7 @@ public class FSM : MonoBehaviour
                 animator.SetBool("Rotate_", false);
                 animator.SetBool("Chase_", true);
                 agent.isStopped = false; // 추적 시작
+                agent.speed = chaseSpeed;
                 isChasing = true;
                 isAttacking = false;
                 break;
@@ -157,6 +162,7 @@ public class FSM : MonoBehaviour
                 animator.SetBool("Chase_", false);
                 animator.SetBool("Attack_", true);
                 isChasing = false;
+                agent.speed = attackSpeed;
                 isAttacking = true;
                 break;
 
