@@ -112,6 +112,7 @@ public class ConsoleManager : MonoBehaviour
     private void OnDisable()
     {
         RemoveInputFieldFocus();
+        StopAllCoroutines();
     }
     private void SetupInputFieldFocus()
     {
@@ -131,6 +132,7 @@ public class ConsoleManager : MonoBehaviour
     }
     private void OnInputFieldEndEdit(string value)
     {
+        
         // Enter 키를 눌렀을 때의 동작
         if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
         {
@@ -167,11 +169,17 @@ public class ConsoleManager : MonoBehaviour
 
         LoadAndDisplayStartScreen();
     }
-
-    public void FixedUpdate()
+    private void FixedUpdate()
     {
-        ScrollRect scrollRect = this.gameObject.GetComponentInChildren<ScrollRect>();
-        
+        float scrollValue = Input.GetAxis("Mouse ScrollWheel");
+        if (Mathf.Abs(scrollValue) > 0.01f)
+        {
+            ScrollRect scrollRect = monitor.GetComponentInParent<ScrollRect>();
+            if (scrollRect != null)
+            {
+                scrollRect.verticalNormalizedPosition = Mathf.Clamp01(scrollRect.verticalNormalizedPosition + scrollValue);
+            }
+        }
     }
     private IEnumerator RefocusInputField()
     {
@@ -225,7 +233,6 @@ public class ConsoleManager : MonoBehaviour
             Enter(inputField.text);
         }
     }
-
     /// <summary>
     /// 입력한 커멘드 분석
     /// </summary>
