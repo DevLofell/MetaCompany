@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class InventorySystem : MonoBehaviour
 {
-    [SerializeField] private List<GameObject> inventory = new List<GameObject>();
+    [SerializeField] public List<GameObject> inventory = new List<GameObject>();
     private InputManager inputManager;
     private int curInventoryContainerNum = 0;
     [SerializeField] private float selectScale = 0.7f;
@@ -13,6 +13,7 @@ public class InventorySystem : MonoBehaviour
     private WaitForSeconds waitScrollingDelay;
     private bool canChange = true;
     private Coroutine coroutine;
+
     private void Start()
     {
         inputManager = InputManager.instance;
