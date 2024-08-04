@@ -15,8 +15,11 @@ EditorBuildSettings:
     path: Assets/01.Scenes/BuildScenes/02.CompanyBuilding.unity
     guid: 1196e818d181fe141b67dcebf5b5bf8c
   - enabled: 1
-    path: Assets/01.Scenes/BuildScenes/03.Dine.unity
-    guid: 40cb9f6d9c1f1254a9688aad5d9c8abd
+    path: Assets/01.Scenes/BuildScenes/03,Rend.unity
+    guid: 8ae6430a5b1f8d645970aeb0fbcc6ff4
+  - enabled: 1
+    path: Assets/01.Scenes/BuildScenes/04.Mansion.unity
+    guid: 6b54bde35d290a1419c25462cec2c861
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: f6da8981b804fa245ba6e358aafecaf4,
       type: 2}
