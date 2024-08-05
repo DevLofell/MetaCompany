@@ -8,6 +8,7 @@ public class UIManager : MonoSingleton<UIManager>
 {
     public Image staminaImage;
     public List<GameObject> inventoryUI = new List<GameObject>();
+    public List<GameObject> itemUIList = new List<GameObject>();
     public List<CanvasGroup> interactionUI = new List<CanvasGroup>();
     [SerializeField] private Vector3 sizeSelectInventory = new Vector3(1.25f, 1.25f, 1.25f);
     [SerializeField] private Vector3 sizeNormalInventory = new Vector3(1f, 1f, 1f);
@@ -90,10 +91,20 @@ public class UIManager : MonoSingleton<UIManager>
             Image slotImage = slotObject.GetComponentInChildren<Image>();
 
             GameObject imageObject = new GameObject("ItemImage");
+            itemUIList[idx] = imageObject;
             imageObject.transform.SetParent(inventoryUI[idx].transform, false);
             slotImage = imageObject.AddComponent<Image>();
             slotImage.rectTransform.sizeDelta = new Vector2(30f, 30f);
             slotImage.sprite = sprite;
+        }
+    }
+
+    public void PullOutInventoryUI(int idx)
+    {
+        if (itemUIList[idx] != null)
+        {
+            Destroy(itemUIList[idx]);
+            itemUIList[idx] = null;
         }
     }
 }
