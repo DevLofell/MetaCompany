@@ -47,7 +47,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (inputManager.IsInputEnabled() && inputManager.raycastAble)
+        if (inputManager.IsInputEnabled())
         {
             isGroundedPlayer = groundCheck.IsGrounded();
             isSlopePlayer = groundCheck.IsSlope();
