@@ -467,6 +467,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a806743d14106d488f2394c614d0eea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDontDestroyObject: 0
   staminaImage: {fileID: 1799196315}
   inventoryUI:
   - {fileID: 53553625}
@@ -2726,12 +2727,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 527604093}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.6796796, y: 1.1208161, z: 5.5682025}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2116497097}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &527604095
 MonoBehaviour:
@@ -2745,13 +2746,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22fd88782a94034489f4d5d214e0354d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDontDestroyObject: 0
   sceneList:
   - sceneName: 00.MainMenu
     buildIndex: 0
     sceneAsset: {fileID: 102900000, guid: 99c9720ab356a0642a771bea13969a05, type: 3}
   - sceneName: 01.Ship
     buildIndex: 1
-    sceneAsset: {fileID: 102900000, guid: 6432b39381cd3aa4ebbe74da1ba642fc, type: 3}
+    sceneAsset: {fileID: 102900000, guid: 63aaf64e4c469d04996011c02b1015fc, type: 3}
   - sceneName: 02.CompanyBuilding
     buildIndex: 2
     sceneAsset: {fileID: 102900000, guid: 1196e818d181fe141b67dcebf5b5bf8c, type: 3}
@@ -2833,6 +2835,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b035881354f10d542b93d49af9248ad0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDontDestroyObject: 0
   inputCrouch: 0
   isRotateAble: 1
 --- !u!1 &593932692 stripped
@@ -4003,11 +4006,7 @@ MonoBehaviour:
     easeplanets: []
     normalplanets: []
     hardplanets: []
-  assetlist:
-  - {fileID: 102900000, guid: 6432b39381cd3aa4ebbe74da1ba642fc, type: 3}
-  - {fileID: 102900000, guid: 1196e818d181fe141b67dcebf5b5bf8c, type: 3}
-  - {fileID: 102900000, guid: 8ae6430a5b1f8d645970aeb0fbcc6ff4, type: 3}
-  - {fileID: 102900000, guid: 6b54bde35d290a1419c25462cec2c861, type: 3}
+  assetlist: []
   referencelist: []
 --- !u!1 &853696482
 GameObject:
@@ -6840,7 +6839,6 @@ Transform:
   - {fileID: 841651317}
   - {fileID: 1294207225}
   - {fileID: 477612402}
-  - {fileID: 527604094}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2145832817 stripped
@@ -7797,4 +7795,5 @@ SceneRoots:
   - {fileID: 666707407}
   - {fileID: 2116497097}
   - {fileID: 765308596}
+  - {fileID: 527604094}
   - {fileID: 1180786919}
