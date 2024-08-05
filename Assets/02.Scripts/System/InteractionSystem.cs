@@ -60,16 +60,16 @@ public class InteractionSystem : MonoBehaviour
             Debug.LogError("Target Dir is not assigned!");
         }
     }
-    bool raycastAble = true;
+    
     private void Update()
     {
-        if (inputManager.IsInputEnabled() && raycastAble)
+        if (inputManager.IsInputEnabled() && inputManager.raycastAble)
         {
             RaycastCenter();
         }
         if (inputManager.PlayerEndInteraction())
         {
-            raycastAble = true;
+            inputManager.raycastAble = true;
         }
     }
 
@@ -106,7 +106,7 @@ public class InteractionSystem : MonoBehaviour
                     // 입력 비활성화
                     if (inputDisableCoroutine != null)
                         StopCoroutine(inputDisableCoroutine);
-                    raycastAble = false;
+                    inputManager.raycastAble = false;
                 }
                 return;
             }

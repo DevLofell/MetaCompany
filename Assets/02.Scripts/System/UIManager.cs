@@ -9,8 +9,8 @@ public class UIManager : MonoSingleton<UIManager>
     public Image staminaImage;
     public List<GameObject> inventoryUI = new List<GameObject>();
     public List<CanvasGroup> interactionUI = new List<CanvasGroup>();
-    [SerializeField] private Vector2 sizeSelectInventory = new Vector2(70f, 70f);
-    [SerializeField] private Vector2 sizeNormalInventory = new Vector2(55f, 55f);
+    [SerializeField] private Vector3 sizeSelectInventory = new Vector3(1.25f, 1.25f, 1.25f);
+    [SerializeField] private Vector3 sizeNormalInventory = new Vector3(1f, 1f, 1f);
     private int originIdx = 0;
     private float lerpSpeed = 7.5f; // 크기 변경 속도 조절
     private Coroutine[] resizeCoroutines;
@@ -39,7 +39,7 @@ public class UIManager : MonoSingleton<UIManager>
             if (resizeCoroutines[originIdx] != null)
                 StopCoroutine(resizeCoroutines[originIdx]);
             resizeCoroutines[originIdx] = StartCoroutine(ResizeUI(inventoryUI[originIdx].GetComponent<RectTransform>(), 
-                inventoryUI[originIdx].GetComponent<RectTransform>().sizeDelta, sizeNormalInventory));
+                inventoryUI[originIdx].GetComponent<RectTransform>().localScale, sizeNormalInventory));
 
             originIdx = idx;
         }
@@ -50,16 +50,16 @@ public class UIManager : MonoSingleton<UIManager>
             sizeNormalInventory, sizeSelectInventory));
     }
 
-    private IEnumerator ResizeUI(RectTransform rt, Vector2 startSize, Vector2 endSize)
+    private IEnumerator ResizeUI(RectTransform rt, Vector3 startSize, Vector3 endSize)
     {
         float elapsedTime = 0f;
         while (elapsedTime < 1f)
         {
-            rt.sizeDelta = Vector2.Lerp(startSize, endSize, elapsedTime);
+            rt.localScale = Vector3.Lerp(startSize, endSize, elapsedTime);
             elapsedTime += Time.deltaTime * lerpSpeed;
             yield return null;
         }
-        rt.sizeDelta = endSize;
+        rt.localScale = endSize;
     }
     #endregion
 

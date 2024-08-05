@@ -477,8 +477,8 @@ MonoBehaviour:
   - {fileID: 484068897}
   - {fileID: 2028081314}
   - {fileID: 421808825}
-  sizeSelectInventory: {x: 70, y: 70}
-  sizeNormalInventory: {x: 55, y: 55}
+  sizeSelectInventory: {x: 1.25, y: 1.25, z: 1.25}
+  sizeNormalInventory: {x: 1, y: 1, z: 1}
   canvas: {fileID: 0}
 --- !u!1 &149423241 stripped
 GameObject:
@@ -2775,6 +2775,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputCrouch: 0
   isRotateAble: 1
+  raycastAble: 1
 --- !u!1 &593932692 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7339708836715108442, guid: b6389b058d0213c409fc309b8e9d01ec,

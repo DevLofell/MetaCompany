@@ -9,6 +9,7 @@ public class InputManager : MonoSingleton<InputManager>
     public bool inputCrouch = false;
     private bool inputEnabled = true;
     public bool isRotateAble = true;
+    public bool raycastAble = true;
     private void Awake()
     {
         playerControls = new MainInputActions();

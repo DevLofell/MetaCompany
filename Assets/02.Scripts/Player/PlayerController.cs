@@ -47,7 +47,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (inputManager.IsInputEnabled())
+        if (inputManager.IsInputEnabled() && inputManager.raycastAble)
         {
             isGroundedPlayer = groundCheck.IsGrounded();
             isSlopePlayer = groundCheck.IsSlope();
@@ -139,6 +139,11 @@ public class PlayerController : MonoBehaviour
             // 캐릭터 이동
             cc.Move(playerVelocity * Time.deltaTime);
         }
+        else
+        {
+            StopWalkAnimations();
+        }
+        
         // 좌우 회전
         if (inputManager.isRotateAble)
         {
