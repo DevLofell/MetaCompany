@@ -139,6 +139,11 @@ public class PlayerController : MonoBehaviour
             // 캐릭터 이동
             cc.Move(playerVelocity * Time.deltaTime);
         }
+        else
+        {
+            StopWalkAnimations();
+        }
+        
         // 좌우 회전
         if (inputManager.isRotateAble)
         {

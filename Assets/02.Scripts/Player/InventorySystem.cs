@@ -68,7 +68,17 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
-    
+    public void PullOutItem()
+    {
+        if (inventory[curInventoryContainerNum] != null)
+        {
+            inventory[curInventoryContainerNum].transform.SetParent(null);
+            inventory[curInventoryContainerNum].GetComponent<BoxCollider>().enabled = true;
+            inventory[curInventoryContainerNum].GetComponent<Rigidbody>().isKinematic = false;
+            inventory[curInventoryContainerNum] = null;
+            uiManager.PullOutInventoryUI(curInventoryContainerNum);
+        }
+    }
 
     //IEnumerator ScrollingTimer()
     //{

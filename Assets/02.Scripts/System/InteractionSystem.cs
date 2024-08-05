@@ -27,7 +27,7 @@ public class InteractionSystem : MonoBehaviour
     private Transform originalLookAtTarget;
     public GameObject grabObj;
     private InteractableObject hitObject;
-
+    private Rigidbody rb;
     private PlayerAnimation anim;
     private InventorySystem inven;
 
@@ -60,16 +60,20 @@ public class InteractionSystem : MonoBehaviour
             Debug.LogError("Target Dir is not assigned!");
         }
     }
-    bool raycastAble = true;
+    
     private void Update()
     {
-        if (inputManager.IsInputEnabled() && raycastAble)
+        if (inputManager.IsInputEnabled() && inputManager.raycastAble)
         {
             RaycastCenter();
         }
         if (inputManager.PlayerEndInteraction())
         {
-            raycastAble = true;
+            inputManager.raycastAble = true;
+        }
+        if (inputManager.PlayerDropItem())
+        {
+            inven.PullOutItem();
         }
     }
 
@@ -106,7 +110,7 @@ public class InteractionSystem : MonoBehaviour
                     // 입력 비활성화
                     if (inputDisableCoroutine != null)
                         StopCoroutine(inputDisableCoroutine);
-                    raycastAble = false;
+                    inputManager.raycastAble = false;
                 }
                 return;
             }
@@ -159,6 +163,8 @@ public class InteractionSystem : MonoBehaviour
             case ObjectType.SHIP_CHARGER:
             case ObjectType.ITEM_ONEHAND:
                 // TODO: 휠 돌리면 애니메이션 내려가면서 아이템도 안나오게
+                rb = hitObject.GetComponent<Rigidbody>();
+                rb.isKinematic = true;
                 //g키 누르면 아이템 떨구게
                 uiManager.UpdateInteractionUI(0, 0, false);
                 // E 누르면 인벤토리 Image 저장

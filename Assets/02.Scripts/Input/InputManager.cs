@@ -9,6 +9,7 @@ public class InputManager : MonoSingleton<InputManager>
     public bool inputCrouch = false;
     private bool inputEnabled = true;
     public bool isRotateAble = true;
+    public bool raycastAble = true;
     private void Awake()
     {
         playerControls = new MainInputActions();
@@ -130,6 +131,11 @@ public class InputManager : MonoSingleton<InputManager>
     {
         isRotateAble = true;
         return playerControls.PlayerActions.EndInteraction.triggered;
+    }
+
+    public bool PlayerDropItem()
+    {
+        return playerControls.PlayerActions.DropItem.triggered;
     }
     #endregion
 }
