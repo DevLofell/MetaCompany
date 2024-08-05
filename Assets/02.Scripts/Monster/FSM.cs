@@ -80,7 +80,7 @@ public class FSM : MonoBehaviour
         NavMeshSurface navMeshSurface = FindObjectOfType<NavMeshSurface>();
 
         // 플레이어 찾기
-        player = GameObject.Find("Capsule");
+        player = GameObject.Find("Player");
 
         // 플레이어의 체력 관련 메서드 가져오기
         play_health = player.GetComponent<PlayerMove>();
@@ -102,6 +102,7 @@ public class FSM : MonoBehaviour
         // 일단 start 부분에서 눈 없는 개 무작정 돌아다니게 하기
         if (NavMesh.SamplePosition(RandomPositionSetting(), out hit, navMeshBounds.size.magnitude, 1))
         {
+            
             agent.SetDestination(hit.position);
             agent.speed = walkSpeed;
         }
@@ -177,14 +178,20 @@ public class FSM : MonoBehaviour
     }
     void UpdateWalkClam()
     {
-        remaindistnace2 = 0.5f;
+        remaindistnace2 = 2f;
+
 
         if (agent.remainingDistance < remaindistnace2)
         {
+
             NavMeshHit hit;
 
             if (NavMesh.SamplePosition(RandomPositionSetting(), out hit, navMeshBounds.size.magnitude, 1))
             {
+                if(agent.pathPending)
+                {
+                    return;
+                }
                 agent.SetDestination(hit.position);
             }
         }
@@ -192,11 +199,12 @@ public class FSM : MonoBehaviour
 
     Vector3 RandomPositionSetting()
     {
+
         Vector3 randomPosition = new Vector3
         (
-            Random.Range(navMeshBounds.min.x, navMeshBounds.max.x),
-            Random.Range(navMeshBounds.min.y, navMeshBounds.max.y),
-            Random.Range(navMeshBounds.min.z, navMeshBounds.max.z)
+            Random.Range(navMeshBounds.max.x * -0.5f, navMeshBounds.max.x * 0.5f),
+            Random.Range(navMeshBounds.max.y * -0.5f, navMeshBounds.max.y * 0.5f),
+            Random.Range(navMeshBounds.max.z * -0.5f, navMeshBounds.max.z * 0.5f)
         );
 
         return randomPosition;
@@ -289,7 +297,7 @@ public class FSM : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.name.Contains("Capsule"))
+        if (other.gameObject.name.Contains("Player"))
         {
             if (!isChasing && !isAttacking)
             {
