@@ -67,13 +67,14 @@ public class InteractionSystem : MonoBehaviour
         {
             RaycastCenter();
         }
-        if (inputManager.PlayerEndInteraction())
+        //if (inputManager.PlayerEndInteraction())
         {
             inputManager.raycastAble = true;
         }
         if (inputManager.PlayerDropItem())
         {
             inven.PullOutItem();
+            anim.IsOneHand(false);
         }
     }
 
@@ -174,7 +175,7 @@ public class InteractionSystem : MonoBehaviour
                 
                 hitObject.transform.SetParent(grabObj.transform);
                 hitObject.GetComponent<BoxCollider>().enabled = false;
-                anim.IsOneHand();
+                anim.IsOneHand(true);
 
                 break;
             case ObjectType.ITEM_TWOHAND:

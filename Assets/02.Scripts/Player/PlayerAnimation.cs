@@ -75,8 +75,8 @@ public class PlayerAnimation : MonoBehaviour
         animator.SetBool("isCrouching", false);
     }
 
-    public void IsOneHand()
+    public void IsOneHand(bool isOneHand)
     {
-        animator.SetBool("isOneHand", true);
+        animator.SetBool("isOneHand", isOneHand);
     }
 }
