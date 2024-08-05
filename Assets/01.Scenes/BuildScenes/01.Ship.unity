@@ -2764,7 +2764,7 @@ MonoBehaviour:
     sceneAsset: {fileID: 102900000, guid: 1196e818d181fe141b67dcebf5b5bf8c, type: 3}
   - sceneName: 03.Rend
     buildIndex: 3
-    sceneAsset: {fileID: 102900000, guid: 8ae6430a5b1f8d645970aeb0fbcc6ff4, type: 3}
+    sceneAsset: {fileID: 102900000, guid: 3c128217506a2004ea2de6efa241f2d5, type: 3}
   - sceneName: 04.Mansion
     buildIndex: 4
     sceneAsset: {fileID: 102900000, guid: 6b54bde35d290a1419c25462cec2c861, type: 3}
