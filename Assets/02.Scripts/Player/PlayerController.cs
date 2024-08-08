@@ -61,7 +61,7 @@ public class PlayerController : MonoBehaviour
                 PlayerWalk(movement);
             }
             PlayerRun();
-
+            PlayerAttack();
             PlayerCrouching();
 
             // 점프 처리
@@ -284,6 +284,18 @@ public class PlayerController : MonoBehaviour
                     anim.CrouchingMove(0);
                 }
             }
+        }
+    }
+
+    private void PlayerAttack()
+    {
+        if (inputManager.PlayerAttackStarted())
+        {
+            anim.IsAttckReady();
+        }
+        else if (inputManager.PlayerAttackImacted())
+        {
+            anim.isAttackImpact();
         }
     }
 }

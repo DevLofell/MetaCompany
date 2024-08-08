@@ -107,6 +107,15 @@ public partial class @MainInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Attack"",
+                    ""type"": ""Value"",
+                    ""id"": ""a3cc9eaf-422c-47ee-8936-4c7344d9e2ce"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -252,6 +261,17 @@ public partial class @MainInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""DropItem"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""972a58f8-50c8-4a9e-a125-84d528835675"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard_Mouse"",
+                    ""action"": ""Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -275,6 +295,7 @@ public partial class @MainInputActions: IInputActionCollection2, IDisposable
         m_PlayerActions_Interaction = m_PlayerActions.FindAction("Interaction", throwIfNotFound: true);
         m_PlayerActions_EndInteraction = m_PlayerActions.FindAction("EndInteraction", throwIfNotFound: true);
         m_PlayerActions_DropItem = m_PlayerActions.FindAction("DropItem", throwIfNotFound: true);
+        m_PlayerActions_Attack = m_PlayerActions.FindAction("Attack", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -345,6 +366,7 @@ public partial class @MainInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerActions_Interaction;
     private readonly InputAction m_PlayerActions_EndInteraction;
     private readonly InputAction m_PlayerActions_DropItem;
+    private readonly InputAction m_PlayerActions_Attack;
     public struct PlayerActionsActions
     {
         private @MainInputActions m_Wrapper;
@@ -358,6 +380,7 @@ public partial class @MainInputActions: IInputActionCollection2, IDisposable
         public InputAction @Interaction => m_Wrapper.m_PlayerActions_Interaction;
         public InputAction @EndInteraction => m_Wrapper.m_PlayerActions_EndInteraction;
         public InputAction @DropItem => m_Wrapper.m_PlayerActions_DropItem;
+        public InputAction @Attack => m_Wrapper.m_PlayerActions_Attack;
         public InputActionMap Get() { return m_Wrapper.m_PlayerActions; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -394,6 +417,9 @@ public partial class @MainInputActions: IInputActionCollection2, IDisposable
             @DropItem.started += instance.OnDropItem;
             @DropItem.performed += instance.OnDropItem;
             @DropItem.canceled += instance.OnDropItem;
+            @Attack.started += instance.OnAttack;
+            @Attack.performed += instance.OnAttack;
+            @Attack.canceled += instance.OnAttack;
         }
 
         private void UnregisterCallbacks(IPlayerActionsActions instance)
@@ -425,6 +451,9 @@ public partial class @MainInputActions: IInputActionCollection2, IDisposable
             @DropItem.started -= instance.OnDropItem;
             @DropItem.performed -= instance.OnDropItem;
             @DropItem.canceled -= instance.OnDropItem;
+            @Attack.started -= instance.OnAttack;
+            @Attack.performed -= instance.OnAttack;
+            @Attack.canceled -= instance.OnAttack;
         }
 
         public void RemoveCallbacks(IPlayerActionsActions instance)
@@ -462,5 +491,6 @@ public partial class @MainInputActions: IInputActionCollection2, IDisposable
         void OnInteraction(InputAction.CallbackContext context);
         void OnEndInteraction(InputAction.CallbackContext context);
         void OnDropItem(InputAction.CallbackContext context);
+        void OnAttack(InputAction.CallbackContext context);
     }
 }
