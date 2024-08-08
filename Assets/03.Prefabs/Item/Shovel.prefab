@@ -97,6 +97,7 @@ GameObject:
   - component: {fileID: 5632325899108174042}
   - component: {fileID: 3706565338833613203}
   - component: {fileID: 3618290301032694903}
+  - component: {fileID: 2921853023580755787}
   m_Layer: 8
   m_Name: Shovel
   m_TagString: Interactable
@@ -185,3 +186,22 @@ MonoBehaviour:
   standingTr: {fileID: 0}
   lookAtDir: {fileID: 0}
   icon: {fileID: 21300000, guid: b89455812f5ec1c42944fe8b50d97e7d, type: 3}
+--- !u!114 &2921853023580755787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8999442482459292208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1fea54354fca424c87eed06e0062a40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemData: {fileID: 11400000, guid: 574d52882cb1be64081eb443bf4a7e69, type: 2}
+  type: Store
+  kg: 6
+  hand: Two
+  hasSound: 0
+  isInteractable: 1
+  hasConduction: 1

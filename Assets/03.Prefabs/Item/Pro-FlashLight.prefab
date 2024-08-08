@@ -12,8 +12,9 @@ GameObject:
   - component: {fileID: 7356013876708468612}
   - component: {fileID: 7520203262005243061}
   - component: {fileID: 201548887464756554}
+  - component: {fileID: 7262400137660988922}
   m_Layer: 0
-  m_Name: ProFlashLight
+  m_Name: Pro-Flashlight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -86,6 +87,26 @@ MonoBehaviour:
   info: 0
   standingTr: {fileID: 0}
   lookAtDir: {fileID: 0}
+  icon: {fileID: 0}
+--- !u!114 &7262400137660988922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5715804130538067613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1fea54354fca424c87eed06e0062a40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemData: {fileID: 11400000, guid: e8129fb9f0aa26c4fab97628c170026f, type: 2}
+  type: Store
+  kg: 2
+  hand: One
+  hasSound: 0
+  isInteractable: 1
+  hasConduction: 0
 --- !u!1 &6954166126782281328
 GameObject:
   m_ObjectHideFlags: 0
