@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da6c56e73b04a2b44805349cf2156a75, type: 3}
+  m_Name: MainItemDatabase
+  m_EditorClassIdentifier: 
+  items:
+  - ID: 10001
+    Name: Airhorn
+    Type: Scrap
+    kg: 0
+    hand: One
+    sound: 1
+    interact: 1
+    Conduction: 0
+  - ID: 10002
+    Name: Big Bolt
+    Type: Scrap
+    kg: 9
+    hand: One
+    sound: 0
+    interact: 0
+    Conduction: 1
+  - ID: 10003
+    Name: Fancy Lamp
+    Type: Scrap
+    kg: 5
+    hand: Two
+    sound: 0
+    interact: 0
+    Conduction: 1
+  - ID: 10004
+    Name: Large Axle
+    Type: Scrap
+    kg: 7
+    hand: Two
+    sound: 0
+    interact: 0
+    Conduction: 1
+  - ID: 10005
+    Name: Rubber Ducky
+    Type: Scrap
+    kg: 3
+    hand: One
+    sound: 1
+    interact: 0
+    Conduction: 0
+  - ID: 10101
+    Name: Shovel
+    Type: Store
+    kg: 6
+    hand: Two
+    sound: 0
+    interact: 1
+    Conduction: 1
+  - ID: 10102
+    Name: Pro-Flashlight
+    Type: Store
+    kg: 2
+    hand: One
+    sound: 0
+    interact: 1
+    Conduction: 0
+  - ID: 10103
+    Name: Stun Grenade
+    Type: Store
+    kg: 2
+    hand: One
+    sound: 0
+    interact: 1
+    Conduction: 1

@@ -172,14 +172,31 @@ public class InteractionSystem : MonoBehaviour
                 inven.PutIndexInventory(hitObject.gameObject, hitObject.icon);
                 // 손의 좌표에 순간이동
                 hitObject.transform.position = grabObj.transform.position;
-                
+                hitObject.transform.rotation = grabObj.transform.rotation;
                 hitObject.transform.SetParent(grabObj.transform);
                 hitObject.GetComponent<BoxCollider>().enabled = false;
                 anim.IsOneHand(true);
 
                 break;
             case ObjectType.ITEM_TWOHAND:
-                // 추가 동작이 필요한 경우 여기에 구현
+                rb = hitObject.GetComponent<Rigidbody>();
+                rb.isKinematic = true;
+                //g키 누르면 아이템 떨구게
+                uiManager.UpdateInteractionUI(0, 0, false);
+                // E 누르면 인벤토리 Image 저장
+                inven.PutIndexInventory(hitObject.gameObject, hitObject.icon);
+                // 손의 좌표에 순간이동
+                hitObject.transform.position = grabObj.transform.position;
+                hitObject.transform.rotation = grabObj.transform.rotation;
+
+                hitObject.transform.SetParent(grabObj.transform);
+                //공격시에 타이밍에 맞춰 true
+                hitObject.GetComponent<BoxCollider>().enabled = false;
+                anim.IsTwoHand(true);
+                //TODO : 내려놓으면 애니메이션 해제
+                //공격시 콜라이더 on
+                //OntriggerEnter
+                //스크립터블오브젝트 클래스 넣기
                 break;
         }
     }
