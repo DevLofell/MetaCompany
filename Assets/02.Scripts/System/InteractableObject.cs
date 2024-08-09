@@ -16,6 +16,4 @@ public class InteractableObject : MonoBehaviour
     public Transform standingTr;
     public Transform lookAtDir;
     public Sprite icon;
-
-
 }

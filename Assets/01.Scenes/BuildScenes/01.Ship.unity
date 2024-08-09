@@ -309,7 +309,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 59645574}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f7633c93f0364a418841eeb8b058634, type: 3}
+  m_Script: {fileID: 11500000, guid: f4044717213e31446939f7bd49c896ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_TrackedObjectOffset: {x: 0, y: 0, z: 0}
@@ -322,23 +322,11 @@ MonoBehaviour:
   m_ScreenY: 0.5
   m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0
-  m_SoftZoneWidth: 0.286
-  m_SoftZoneHeight: 0.286
+  m_SoftZoneWidth: 0.099
+  m_SoftZoneHeight: 0.109
   m_BiasX: 0
   m_BiasY: 0
   m_CenterOnActivate: 1
-  m_GroupFramingSize: 0.8
-  m_FramingMode: 2
-  m_FrameDamping: 2
-  m_AdjustmentMode: 0
-  m_MaxDollyIn: 5000
-  m_MaxDollyOut: 5000
-  m_MinimumDistance: 1
-  m_MaximumDistance: 5000
-  m_MinimumFOV: 3
-  m_MaximumFOV: 60
-  m_MinimumOrthoSize: 1
-  m_MaximumOrthoSize: 5000
 --- !u!1 &82018479 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7898972149791214575, guid: b6389b058d0213c409fc309b8e9d01ec,
@@ -5400,6 +5388,12 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 6743699031268460001, guid: b6389b058d0213c409fc309b8e9d01ec, type: 3}
+--- !u!4 &1355154271 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5822874008268874523, guid: 0c42cc8adc08be342918e39626cb5ac0,
+    type: 3}
+  m_PrefabInstance: {fileID: 3460181135434177872}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1359026655 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -3394445363847405189, guid: b6389b058d0213c409fc309b8e9d01ec,
@@ -7450,6 +7444,16 @@ PrefabInstance:
       propertyPath: sensitivity
       value: 0.02
       objectReference: {fileID: 0}
+    - target: {fileID: 2045741109163334843, guid: 0c42cc8adc08be342918e39626cb5ac0,
+        type: 3}
+      propertyPath: cameraTransform
+      value: 
+      objectReference: {fileID: 853696483}
+    - target: {fileID: 2045741109163334843, guid: 0c42cc8adc08be342918e39626cb5ac0,
+        type: 3}
+      propertyPath: playerTransform
+      value: 
+      objectReference: {fileID: 1355154271}
     - target: {fileID: 3054441097888580143, guid: 0c42cc8adc08be342918e39626cb5ac0,
         type: 3}
       propertyPath: m_LocalRotation.w

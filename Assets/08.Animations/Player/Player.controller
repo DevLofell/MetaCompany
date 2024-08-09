@@ -733,7 +733,7 @@ AnimatorController:
   - serializedVersion: 5
     m_Name: Locomotion
     m_StateMachine: {fileID: -6051399939218801874}
-    m_Mask: {fileID: 31900000, guid: b67563163de066a49bf13cf7a0cea1af, type: 2}
+    m_Mask: {fileID: 0}
     m_Motions: []
     m_Behaviours: []
     m_BlendingMode: 0
