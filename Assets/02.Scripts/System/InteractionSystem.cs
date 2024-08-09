@@ -236,7 +236,7 @@ public class InteractionSystem : MonoBehaviour
             // 콘솔 화면만 보게 돌려주는 기능 추가
             if (hitObject.type == ObjectType.SHIP_CONSOLE)
             {
-                float newYRotation = Mathf.LerpAngle(transform.eulerAngles.y, targetRotation.eulerAngles.y, 0.1f);
+                float newYRotation = Mathf.LerpAngle(transform.eulerAngles.y, targetRotation.eulerAngles.y, 10f * Time.deltaTime);
                 transform.rotation = Quaternion.Euler(0f, newYRotation, 0f);
             }
 
