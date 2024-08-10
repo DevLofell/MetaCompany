@@ -3531,13 +3531,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22fd88782a94034489f4d5d214e0354d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDontDestroyObject: 0
   sceneList:
   - sceneName: 00.MainMenu
     buildIndex: 0
     sceneAsset: {fileID: 102900000, guid: 99c9720ab356a0642a771bea13969a05, type: 3}
   - sceneName: 01.Ship
     buildIndex: 1
-    sceneAsset: {fileID: 102900000, guid: 6432b39381cd3aa4ebbe74da1ba642fc, type: 3}
+    sceneAsset: {fileID: 102900000, guid: 63aaf64e4c469d04996011c02b1015fc, type: 3}
+  - sceneName: 02.CompanyBuilding
+    buildIndex: 2
+    sceneAsset: {fileID: 102900000, guid: 1196e818d181fe141b67dcebf5b5bf8c, type: 3}
+  - sceneName: 03.Rend
+    buildIndex: 3
+    sceneAsset: {fileID: 102900000, guid: 3c128217506a2004ea2de6efa241f2d5, type: 3}
+  - sceneName: 04.Mansion
+    buildIndex: 4
+    sceneAsset: {fileID: 102900000, guid: 6b54bde35d290a1419c25462cec2c861, type: 3}
 --- !u!1 &1930774219
 GameObject:
   m_ObjectHideFlags: 0

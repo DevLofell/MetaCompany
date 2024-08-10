@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.InputSystem.DefaultInputActions;
 
 public class InputManager : MonoSingleton<InputManager>
 {
@@ -9,11 +11,13 @@ public class InputManager : MonoSingleton<InputManager>
     public bool inputCrouch = false;
     private bool inputEnabled = true;
     public bool isRotateAble = true;
+    public bool raycastAble = true;
+    public bool isAttackAble = false;
+    public InputAction mouseAction;
     private void Awake()
     {
         playerControls = new MainInputActions();
         Cursor.visible = false;
-        //playerControls.PlayerActions.MouseWheel.performed += x
     }
 
     private void OnEnable()
@@ -29,6 +33,7 @@ public class InputManager : MonoSingleton<InputManager>
     #region Input_Move
     public Vector2 GetPlayerMovement()
     {
+        if (!inputEnabled) return Vector2.zero;
         return playerControls.PlayerActions.Movement.ReadValue<Vector2>();
     }
     #endregion
@@ -36,9 +41,11 @@ public class InputManager : MonoSingleton<InputManager>
     #region Input_Look
     public Vector2 GetMouseDelta()
     {
-        if (!inputEnabled) return Vector2.zero;
-        
-        return playerControls.PlayerActions.Look.ReadValue<Vector2>();
+        if (playerControls.PlayerActions.Look != null)
+        {
+            return playerControls.PlayerActions.Look.ReadValue<Vector2>();
+        }
+        return Vector2.zero;
     }
 
     public void EnableInput(bool enable)
@@ -106,6 +113,7 @@ public class InputManager : MonoSingleton<InputManager>
     #region Input_Wheel
     public Vector2 InventorySwitching()
     {
+        if (!inputEnabled) return Vector2.zero;
         return playerControls.PlayerActions.MouseWheel.ReadValue<Vector2>();
     }
 
@@ -129,6 +137,30 @@ public class InputManager : MonoSingleton<InputManager>
     public bool PlayerEndInteraction()
     {
         return playerControls.PlayerActions.EndInteraction.triggered;
+    }
+
+    public bool PlayerDropItem()
+    {
+        return playerControls.PlayerActions.DropItem.triggered;
+    }
+    #endregion
+
+    #region Input_Attack
+    public bool PlayerAttackStarted()
+    {
+        if (playerControls.PlayerActions.Attack.IsPressed())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public bool PlayerAttackImacted()
+    {
+        return playerControls.PlayerActions.Attack.WasReleasedThisFrame();
     }
     #endregion
 }

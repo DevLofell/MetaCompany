@@ -47,8 +47,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        print(inputManager.isRotateAble);
-        if (inputManager.isRotateAble)
+        if (inputManager.IsInputEnabled())
         {
             isGroundedPlayer = groundCheck.IsGrounded();
             isSlopePlayer = groundCheck.IsSlope();
@@ -62,7 +61,11 @@ public class PlayerController : MonoBehaviour
                 PlayerWalk(movement);
             }
             PlayerRun();
-
+            /*if ()
+            {
+                PlayerAttack();
+            }*/
+            
             PlayerCrouching();
 
             // 점프 처리
@@ -76,13 +79,10 @@ public class PlayerController : MonoBehaviour
                     stamina.ChangeCoroutine("Increase");
                 }
             }
-            // 좌우 회전
-            Vector2 lookInput = inputManager.GetMouseDelta();
-
+            
             //Quaternion targetRotation = Quaternion.LookRotation();
             //transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 30f);
-            float mouseX = lookInput.x * rotationSpeed * Time.deltaTime;
-            transform.Rotate(Vector3.up * mouseX);
+            
             // 회전 처리
             //Vector3 lookDirection = cameraTr.forward;
             //lookDirection.y = 0f;
@@ -142,6 +142,18 @@ public class PlayerController : MonoBehaviour
             }
             // 캐릭터 이동
             cc.Move(playerVelocity * Time.deltaTime);
+        }
+        else
+        {
+            StopWalkAnimations();
+        }
+        
+        // 좌우 회전
+        if (inputManager.isRotateAble)
+        {
+            Vector2 lookInput = inputManager.GetMouseDelta();
+            float mouseX = lookInput.x * rotationSpeed * Time.deltaTime;
+            transform.Rotate(Vector3.up * mouseX);
         }
     }
 
@@ -276,6 +288,18 @@ public class PlayerController : MonoBehaviour
                     anim.CrouchingMove(0);
                 }
             }
+        }
+    }
+
+    private void PlayerAttack()
+    {
+        if (inputManager.PlayerAttackStarted())
+        {
+            anim.IsAttckReady();
+        }
+        else if (inputManager.PlayerAttackImacted())
+        {
+            anim.isAttackImpact();
         }
     }
 }

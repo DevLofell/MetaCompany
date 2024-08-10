@@ -81,8 +81,11 @@ public class ConsoleManager : MonoBehaviour
     public GameObject Spacer;
     //집중된 InputField
     public InputField inputField;
+    //스크롤
+    
     //현재 Output
     private Text output;
+
 
 
     private ConsoleState currentState = ConsoleState.Normal;
@@ -98,16 +101,52 @@ public class ConsoleManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    
-        
-        
+
+
     }
     public void OnEnable()
     {
         currentState = ConsoleState.Normal;
         LoadAndDisplayStartScreen();
     }
+    private void OnDisable()
+    {
+        RemoveInputFieldFocus();
+        StopAllCoroutines();
+    }
+    public void OnDestroy()
+    {
+        StopAllCoroutines();
+    }
+    private void SetupInputFieldFocus()
+    {
+        if (inputField != null)
+        {
+            inputField.onEndEdit.AddListener(OnInputFieldEndEdit);
+            inputField.ActivateInputField();
+        }
+    }
 
+    private void RemoveInputFieldFocus()
+    {
+        if (inputField != null)
+        {
+            inputField.onEndEdit.RemoveListener(OnInputFieldEndEdit);
+        }
+    }
+    private void OnInputFieldEndEdit(string value)
+    {
+        
+        // Enter 키를 눌렀을 때의 동작
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+        {
+            Enter(value);
+            inputField.text = "";
+        }
+
+        // 포커스를 다시 설정
+        StartCoroutine(RefocusInputField());
+    }
 
     public IEnumerator Start()
     {
@@ -134,8 +173,24 @@ public class ConsoleManager : MonoBehaviour
 
         LoadAndDisplayStartScreen();
     }
-
-    
+    private void FixedUpdate()
+    {
+        float scrollValue = Input.GetAxis("Mouse ScrollWheel");
+        if (Mathf.Abs(scrollValue) > 0.01f)
+        {
+            ScrollRect scrollRect = monitor.GetComponentInParent<ScrollRect>();
+            if (scrollRect != null)
+            {
+                scrollRect.verticalNormalizedPosition = Mathf.Clamp01(scrollRect.verticalNormalizedPosition + scrollValue);
+            }
+        }
+    }
+    private IEnumerator RefocusInputField()
+    {
+        // 한 프레임 대기 (즉시 실행하면 포커스가 제대로 잡히지 않을 수 있음)
+        yield return null;
+        inputField.ActivateInputField();
+    }
     /// <summary>
     /// 커멘드 화면에 보이기
     /// </summary>
@@ -182,7 +237,6 @@ public class ConsoleManager : MonoBehaviour
             Enter(inputField.text);
         }
     }
-
     /// <summary>
     /// 입력한 커멘드 분석
     /// </summary>
@@ -427,6 +481,8 @@ public class ConsoleManager : MonoBehaviour
             PrintToConsole($"Routing autopilot to the {currentTargetPlanet.name}.");
             PrintToConsole($"Please enjoy your flight", false);
             // SceneManagement.LoadScene(currentTargetPlanet.asset.name);
+            string name = currentTargetPlanet.assetname;
+            SceneLoadManager.instance.LoadSceneByName(name);
         }
         else if (IsInputSimilar(input, "deny", 0.15))
         {
@@ -469,7 +525,7 @@ public class ConsoleManager : MonoBehaviour
                 }
             }
 
-            Debug.Log("모니터 출력 :" + message);
+            //Debug.Log("모니터 출력 :" + message);
             //내보낼 인스턴스
             GameObject outIns = Instantiate(outputPrefab, monitor);
             outIns.transform.SetSiblingIndex(Spacer.transform.GetSiblingIndex() + 1);
@@ -497,13 +553,19 @@ public class ConsoleManager : MonoBehaviour
         // InputField 활성화 및 포커스
         inputField.Select();
         inputField.ActivateInputField();
+        SetupInputFieldFocus();
 
         ScrollRect scrollRect = monitor.GetComponentInParent<ScrollRect>();
+
+        RectTransform rect = scrollRect.GetComponent<Transform>() as RectTransform;
         if (scrollRect != null)
         {
-            Canvas.ForceUpdateCanvases(); // 이 줄을 추가하여 레이아웃을 강제로 업데이트합니다.
+            LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)scrollRect.transform);
+            rect.ForceUpdateRectTransforms();
             scrollRect.verticalNormalizedPosition = 0f; // 스크롤뷰를 가장 아래로 설정합니다.
+            Canvas.ForceUpdateCanvases(); // 이 줄을 추가하여 레이아웃을 강제로 업데이트합니다.
         }
+        
 
     }
 

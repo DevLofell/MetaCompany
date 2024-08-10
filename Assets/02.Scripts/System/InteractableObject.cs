@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public enum ObjectType
 {
@@ -14,4 +15,5 @@ public class InteractableObject : MonoBehaviour
     public int info;
     public Transform standingTr;
     public Transform lookAtDir;
+    public Sprite icon;
 }
