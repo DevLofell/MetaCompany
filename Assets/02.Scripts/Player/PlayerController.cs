@@ -26,8 +26,9 @@ public class PlayerController : MonoBehaviour
     private PlayerAnimation anim;
     private StaminaSystem stamina;
     private PlayerSoundSystem sound;
+    private InteractionSystem interaction;
 
-    public GameObject playerModel;
+    public GameObject grabObj;
     private void Start()
     {
         groundCheck = GetComponent<GroundCheck>();
@@ -39,6 +40,7 @@ public class PlayerController : MonoBehaviour
         anim = GetComponent<PlayerAnimation>();
         stamina = GetComponent<StaminaSystem>();
         sound = GetComponentInChildren<PlayerSoundSystem>();
+        interaction = GetComponent<InteractionSystem>();
     }
     private float gravityMultiplier = 2f; // 중력 배율 추가
     private float jumpVelocity;
@@ -61,10 +63,16 @@ public class PlayerController : MonoBehaviour
                 PlayerWalk(movement);
             }
             PlayerRun();
-            /*if ()
+            if (interaction.hitObjectType == "Two")
             {
-                PlayerAttack();
-            }*/
+                if (grabObj.transform.GetChild(0) != null)
+                {
+                    if (grabObj.transform.GetChild(0).name == "Shovel")
+                    {
+                        PlayerAttack();
+                    }
+                }
+            }
             
             PlayerCrouching();
 
@@ -297,7 +305,7 @@ public class PlayerController : MonoBehaviour
         {
             anim.IsAttckReady();
         }
-        else if (inputManager.PlayerAttackImacted())
+        if (inputManager.PlayerAttackImacted())
         {
             anim.isAttackImpact();
         }

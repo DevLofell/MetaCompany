@@ -15,7 +15,7 @@ public class ItemComponent : MonoBehaviour
         SyncWithData();
     }
 
-    private void Awake()
+    private void Start()
     {
         SyncWithData();
     }

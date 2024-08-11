@@ -16,4 +16,35 @@ public class InteractableObject : MonoBehaviour
     public Transform standingTr;
     public Transform lookAtDir;
     public Sprite icon;
+
+    private ItemComponent item;
+
+    private void Start()
+    {
+        item = GetComponent<ItemComponent>();
+        ItemInitializ();
+    }
+
+    private void ItemInitializ()
+    {
+        if (item != null)
+        {
+            switch (item.hand)
+            {
+                case "One":
+                    type = ObjectType.ITEM_ONEHAND;
+                    break;
+                case "Two":
+                    if (gameObject.name == "FancyLamp")
+                    {
+                        type = ObjectType.ITEM_ONEHAND;
+                    }
+                    else
+                    {
+                        type = ObjectType.ITEM_TWOHAND;
+                    }
+                    break;
+            }
+        }
+    }
 }

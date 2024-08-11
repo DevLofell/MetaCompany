@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 3247213973496184030}
   - component: {fileID: 7428394922695247804}
   m_Layer: 8
-  m_Name: ShovelModel
-  m_TagString: Untagged
+  m_Name: Shovel
+  m_TagString: Interactable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 5999444402180877455}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: -0.546}
+  m_LocalPosition: {x: 0, y: 0, z: -0.447}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -94,10 +94,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8477694899057285203}
-  - component: {fileID: 5632325899108174042}
-  - component: {fileID: 3706565338833613203}
-  - component: {fileID: 3618290301032694903}
-  - component: {fileID: 2921853023580755787}
+  - component: {fileID: 1320316668478471932}
+  - component: {fileID: 4354021848030885905}
+  - component: {fileID: 6736682645374412883}
+  - component: {fileID: 922911766159837991}
+  - component: {fileID: 4045118382392418962}
   m_Layer: 8
   m_Name: Shovel
   m_TagString: Interactable
@@ -121,7 +122,55 @@ Transform:
   - {fileID: 8809985574634268136}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &5632325899108174042
+--- !u!114 &1320316668478471932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8999442482459292208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1fea54354fca424c87eed06e0062a40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemData: {fileID: 11400000, guid: 574d52882cb1be64081eb443bf4a7e69, type: 2}
+  type: Store
+  kg: 6
+  hand: Two
+  hasSound: 0
+  isInteractable: 1
+  hasConduction: 1
+--- !u!114 &4354021848030885905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8999442482459292208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cac17222b7853648a576ed7ef4bb1cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 4
+  info: 0
+  standingTr: {fileID: 0}
+  lookAtDir: {fileID: 0}
+  icon: {fileID: 21300000, guid: b89455812f5ec1c42944fe8b50d97e7d, type: 3}
+--- !u!114 &6736682645374412883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8999442482459292208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e155da77aa496c41b97acba1326dace, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!65 &922911766159837991
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -140,9 +189,9 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.6310463, y: 0.16232687, z: 2.523593}
-  m_Center: {x: -0.0062829256, y: 0.012691945, z: -0.8873148}
---- !u!54 &3706565338833613203
+  m_Size: {x: 0.60412914, y: 0.08886868, z: 2.515346}
+  m_Center: {x: -0.0031418502, y: 0.021992832, z: -0.7694111}
+--- !u!54 &4045118382392418962
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -168,40 +217,4 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!114 &3618290301032694903
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8999442482459292208}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1cac17222b7853648a576ed7ef4bb1cd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 4
-  info: 0
-  standingTr: {fileID: 0}
-  lookAtDir: {fileID: 0}
-  icon: {fileID: 21300000, guid: b89455812f5ec1c42944fe8b50d97e7d, type: 3}
---- !u!114 &2921853023580755787
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8999442482459292208}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1fea54354fca424c87eed06e0062a40, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemData: {fileID: 11400000, guid: 574d52882cb1be64081eb443bf4a7e69, type: 2}
-  type: Store
-  kg: 6
-  hand: Two
-  hasSound: 0
-  isInteractable: 1
-  hasConduction: 1
+  m_CollisionDetection: 1

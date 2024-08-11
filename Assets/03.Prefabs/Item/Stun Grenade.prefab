@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3508503175950100312}
+  - component: {fileID: 7278294886650812422}
   - component: {fileID: 5443442909107262026}
   m_Layer: 8
   m_Name: Stun Grenade
@@ -32,6 +33,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7278294886650812422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4160120839764310617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cac17222b7853648a576ed7ef4bb1cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 3
+  info: 0
+  standingTr: {fileID: 0}
+  lookAtDir: {fileID: 0}
+  icon: {fileID: 0}
 --- !u!114 &5443442909107262026
 MonoBehaviour:
   m_ObjectHideFlags: 0

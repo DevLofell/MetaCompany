@@ -105,12 +105,15 @@ public class PlayerAnimation : MonoBehaviour
         if (isEndAtk == true)
         {
             isEndAtk = false;
+            animator.SetBool("isAtkImpacted", false);
             animator.SetBool("isAtkReady", true);
         }
         
     }
     public void isAttackImpact()
     {
+        isEndAtk = true;
+        animator.SetBool("isAtkReady", false);
         animator.SetBool("isAtkImpacted", true);
     }
 }

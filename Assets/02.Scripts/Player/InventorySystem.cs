@@ -87,6 +87,7 @@ public class InventorySystem : MonoBehaviour
         }
         else 
         {
+            //obj = obj.transform.GetChild(0).gameObject;
             // 인덱스 검사
             if (inventory[curInventoryContainerNum] != null)
             {
