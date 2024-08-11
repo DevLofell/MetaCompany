@@ -16,14 +16,9 @@ public class Sound_Check : MonoBehaviour
     // 소리 감지 임계값
     float soundeThreshold = 0.1f;
 
-    
-
     // Enemy 소리 체크 여부
     bool isPlayerDetected;
     
-
-
-
     void Start()
     {
         playerAudioSource = player.GetComponent<AudioSource>();

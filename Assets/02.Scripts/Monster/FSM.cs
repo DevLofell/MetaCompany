@@ -110,6 +110,12 @@ public class FSM : MonoBehaviour
         // 애니메이터 작동하기
         animator.SetBool("WalkClam", true);
 
+        if (player == null)
+        {
+            Debug.LogError("Player not found. Make sure the Player object has the 'Player' tag.");
+        }
+
+
 
     }
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,7 +9,8 @@ public enum CoilHeadState
     Idle,
     Patrol,
     Trace,
-    FastTrace
+    FastTrace,
+    Die
 }
 
 public class CoilHeadFSM : MonoBehaviour
@@ -23,11 +25,14 @@ public class CoilHeadFSM : MonoBehaviour
     public Transform player;
     public LayerMask obstacleLayer;
 
+    public Animator animator;
     private Vector3 randomDestination;
 
     private void Start()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();    
+        player = player ?? GameObject.FindWithTag("Player").transform;
         StartCoroutine(FSMRoutine());
     }
 
@@ -42,6 +47,26 @@ public class CoilHeadFSM : MonoBehaviour
     public void ChangeState(CoilHeadState state)
     {
         coilHeadState = state;
+        switch(state)
+        {
+            case CoilHeadState.Idle:
+                animator.SetBool("isStopped", true);
+                break;
+            case CoilHeadState.Patrol:
+                animator.SetBool("isStopped", false);
+                break;
+            case CoilHeadState.Trace:
+                animator.SetBool("isStopped", true);
+                break;
+            case CoilHeadState.FastTrace:
+                animator.SetBool("isStopped", false);
+                break;
+            case CoilHeadState.Die:
+                animator.SetBool("isStopped", true);
+                break;
+            default:
+                break;
+        }
     }
 
     private IEnumerator IdleState()

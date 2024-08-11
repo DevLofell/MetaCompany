@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
     private StaminaSystem stamina;
     private PlayerSoundSystem sound;
     private InteractionSystem interaction;
+    private InventorySystem inventory;
 
     public GameObject grabObj;
     private void Start()
@@ -38,6 +39,7 @@ public class PlayerController : MonoBehaviour
         jumpVelocity = Mathf.Sqrt(jumpForce * -2f * gravity);
         originSpeed = playerSpeed;
         anim = GetComponent<PlayerAnimation>();
+        inventory = GetComponent<InventorySystem>();
         stamina = GetComponent<StaminaSystem>();
         sound = GetComponentInChildren<PlayerSoundSystem>();
         interaction = GetComponent<InteractionSystem>();
@@ -63,15 +65,9 @@ public class PlayerController : MonoBehaviour
                 PlayerWalk(movement);
             }
             PlayerRun();
-            if (interaction.hitObjectType == "Two")
+            if (inventory.canAttack)
             {
-                if (grabObj.transform.GetChild(0) != null)
-                {
-                    if (grabObj.transform.GetChild(0).name == "Shovel")
-                    {
-                        PlayerAttack();
-                    }
-                }
+                PlayerAttack();
             }
             
             PlayerCrouching();

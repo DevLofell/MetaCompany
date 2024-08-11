@@ -13,18 +13,25 @@ public class InventorySystem : MonoBehaviour
     [SerializeField] private float normalScale = 0.55f;
     [SerializeField] private float scrollingDelay = 3f;
     private WaitForSeconds waitScrollingDelay;
-    private bool canChange = true;
     private Coroutine coroutine;
 
     private UIManager uiManager;
+    
+    public bool canAttack = true;
+    private bool canScroll = true;
+
+    public GameObject[] playerToolObj;
+    public GameObject grabObj;
+
     private void Start()
     {
         uiManager = UIManager.instance;
         inputManager = InputManager.instance;
         anim = GetComponent<PlayerAnimation>();
         waitScrollingDelay = new WaitForSeconds(scrollingDelay);
+        PutToolInventory();
     }
-    private bool canScroll = true;
+    
     private void Update()
     {
         if (canScroll && inputManager.IsScrollingEnter())
@@ -43,6 +50,45 @@ public class InventorySystem : MonoBehaviour
         yield return waitScrollingDelay;
         canScroll = true;
     }
+    private void PutToolInventory()
+    {
+        for (int i = 0; i < playerToolObj.Length; i++)
+        {
+            GameObject toolObj = Instantiate(playerToolObj[i], grabObj.transform.position, Quaternion.identity);
+            PutIndexInventory(toolObj, toolObj.GetComponent<InteractableObject>().icon);
+            toolObj.GetComponent<Rigidbody>().isKinematic = true;
+            toolObj.transform.position = grabObj.transform.position;
+            toolObj.transform.rotation = grabObj.transform.rotation;
+            toolObj.transform.SetParent(grabObj.transform);
+
+            toolObj.GetComponent<BoxCollider>().enabled = false;
+            if (toolObj.GetComponent<InteractableObject>().type.ToString() == "ITEM_ONEHAND")
+            {
+                anim.IsOneHand(true);
+            }
+            if (toolObj.GetComponent<InteractableObject>().type.ToString() == "ITEM_TWOHAND")
+            {
+                anim.IsTwoHand(true);
+            }
+        }
+    }
+
+    public bool CheckShovel(int index)
+    {
+        if (inventory[index] != null)
+        {
+            if (inventory[index].name == "Shovel")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return false;
+    }
+
     private void Switching(int scrollValue)
     {
         if (inventory[curInventoryContainerNum] != null)
@@ -52,6 +98,14 @@ public class InventorySystem : MonoBehaviour
         
         curInventoryContainerNum += scrollValue;
         curInventoryContainerNum = (curInventoryContainerNum+4) % 4;
+        if (CheckShovel(curInventoryContainerNum))
+        {
+            canAttack = true;
+        }
+        else
+        {
+            canAttack = false;
+        }
         if (inventory[curInventoryContainerNum] != null)
         {
             inventory[curInventoryContainerNum].SetActive(true);
@@ -117,6 +171,7 @@ public class InventorySystem : MonoBehaviour
             inventory[curInventoryContainerNum].GetComponent<BoxCollider>().enabled = true;
             inventory[curInventoryContainerNum].GetComponent<Rigidbody>().isKinematic = false;
             inventory[curInventoryContainerNum] = null;
+            ChangePose(inventory[curInventoryContainerNum]);
             uiManager.PullOutInventoryUI(curInventoryContainerNum);
         }
     }

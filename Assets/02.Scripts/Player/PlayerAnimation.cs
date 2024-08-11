@@ -6,8 +6,7 @@ public class PlayerAnimation : MonoBehaviour
 {
     private Animator animator;
     private bool isEndAtk = true;
-
-    private void Start()
+    private void Awake()
     {
         animator = GetComponent<Animator>();
     }

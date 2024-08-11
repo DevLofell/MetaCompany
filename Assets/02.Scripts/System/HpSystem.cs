@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class HpSystem : MonoBehaviour
 {
-    private float curHp;
+    // private float curHp;
+    public float curHp;
     [SerializeField] private float maxHp;
 
     private void Start()
